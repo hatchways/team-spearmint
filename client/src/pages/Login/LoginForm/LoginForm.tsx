@@ -75,7 +75,17 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             onChange={handleChange}
           />
 
-          <Box textAlign="center" marginTop={5}>
+          <Box className={classes.buttonsWrapper} marginTop={5}>
+            <Button
+              type="submit"
+              size="large"
+              variant="outlined"
+              color="primary"
+              className={classes.submit}
+              disableElevation
+            >
+              Demo
+            </Button>
             <Button
               type="submit"
               size="large"
