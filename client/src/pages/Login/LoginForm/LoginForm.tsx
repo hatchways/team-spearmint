@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
 import { useAuth } from '../../../context/useAuthContext';
+import demoUserAvatar from '../../../images/landing/hero.jpg';
 
 interface Props {
   handleSubmit: (
@@ -34,10 +35,19 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
     success: {
       message: 'hello world',
       user: {
-        name: 'email@email.com',
-        email: 'password123',
+        name: 'Demo User',
+        email: 'email@email.com',
       },
-      profile: 'profile user',
+      profile: {
+        userId: '123456789',
+        name: 'Demo User',
+        description: 'I love pets',
+        gender: 'male',
+        address: 'Las vegas',
+        telephone: '720 765 9876',
+        birthday: null,
+        photo: { demoUserAvatar },
+      },
       token: '123456abcdef',
     },
   };
