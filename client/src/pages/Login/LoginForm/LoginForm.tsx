@@ -1,10 +1,11 @@
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Formik, FormikHelpers } from 'formik';
+import { Formik, FormikHelpers, validateYupSchema } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
+import { useAuth } from '../../../context/useAuthContext';
 
 interface Props {
   handleSubmit: (
@@ -27,6 +28,19 @@ interface Props {
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
   const classes = useStyles();
+  const { updateLoginContext } = useAuth();
+
+  const hardCodedData = {
+    success: {
+      message: 'hello world',
+      user: {
+        name: 'email@email.com',
+        email: 'password123',
+      },
+      profile: 'profile user',
+      token: '123456abcdef',
+    },
+  };
 
   return (
     <Formik
@@ -77,7 +91,9 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
 
           <Box className={classes.buttonsWrapper} marginTop={5}>
             <Button
-              type="submit"
+              onClick={() => {
+                updateLoginContext(hardCodedData.success);
+              }}
               size="large"
               variant="outlined"
               color="primary"
