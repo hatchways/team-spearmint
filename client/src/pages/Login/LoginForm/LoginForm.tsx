@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
 import { useAuth } from '../../../context/useAuthContext';
-import demoUserAvatar from '../../../images/landing/hero.jpg';
 
 interface Props {
   handleSubmit: (
@@ -36,7 +35,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
       message: 'hello world',
       user: {
         name: 'Demo User',
-        email: 'email@email.com',
+        email: 'demouser@email.com',
       },
       profile: {
         userId: '123456789',
@@ -45,8 +44,8 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
         gender: 'male',
         address: 'Las vegas',
         telephone: '720 765 9876',
-        birthday: null,
-        photo: { demoUserAvatar },
+        birthday: new Date('May 01, 1980 00:00:00'),
+        photo: '',
       },
       token: '123456abcdef',
     },
