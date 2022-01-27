@@ -113,8 +113,11 @@ const Navbar: React.FC = () => {
 
   const renderMenuItems = () => {
     // TODO: conditionally render based on profile type
+    //   Profiles have an attribute accountType
+    //   NEED_TO: Make a request to get the associated profile
+    const profile = { accountType: 'pet_owner' }; //dummyProfile
     return menuItems.map((menu) => {
-      if (menu.authenticated) {
+      if (menu.authenticated && menu.canView?.includes(profile.accountType)) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
         return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
