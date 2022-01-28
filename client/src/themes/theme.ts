@@ -5,9 +5,12 @@ export const theme = createTheme({
     primary: {
       main: '#f14140',
     },
+    secondary: {
+      main: '#fff',
+    },
   },
   typography: {
-    fontFamily: '"Roboto", "Open Sans", "sans-serif"',
+    fontFamily: '"Roboto", "Arial"',
     fontSize: 12,
     button: {
       fontWeight: 700,

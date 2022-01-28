@@ -4,6 +4,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './themes/theme';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Landing from './pages/Landing/Landing';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -24,6 +25,7 @@ function App(): JSX.Element {
               <CssBaseline />
               <Navbar />
               <Switch>
+                <Route exact path="/" component={Landing} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/dashboard" component={Dashboard} />

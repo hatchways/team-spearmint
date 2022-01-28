@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
 import {
@@ -10,17 +10,18 @@ import {
   ListItemText,
   Menu,
   MenuItem as DropdownMenuItem,
+  menuItemClasses,
   styled,
 } from '@mui/material';
 import { AccountType } from '../../types/AccountType';
 
 import lovingSitterLogo from '../../images/logo.svg';
 import { useStyles } from './useStyles';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
 
 const NavbarButton = styled(Button)({
-  padding: '15px 0',
+  padding: '10px 0px',
 });
 
 const menuItems = [
@@ -130,7 +131,9 @@ const Navbar: React.FC = () => {
       container
     >
       <Grid xs={4} md={6} item>
-        <img className={classes.navbarLogo} src={lovingSitterLogo} />
+        <NavLink className={classes.navbarItem} to="/">
+          <img className={classes.navbarLogo} src={lovingSitterLogo} />
+        </NavLink>
       </Grid>
       <Grid xs={8} md={6} item>
         <Grid container alignItems="center" gap={2} justifyContent="flex-end">
