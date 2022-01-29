@@ -2,7 +2,6 @@
    
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
-const upload = require("../utils/upload");
 
 // @route PUT /profile/edit
 // @desc edit user profile
@@ -40,27 +39,3 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
     },
   });
 });
-
-// @route POST /profile/upload
-// @desc Post user profile photo
-// @access Private
-exports.uploadProfilePhoto = asyncHandler(async (req, res, next) => {
-    if (!req.user) {
-        return new Error("User id is required!")
-    } else {
-        const profile = await User.findById(req.user.id, "profile");
-  
-        if (!profile) {
-          res.status(401);
-          throw new Error("Not authorized");
-        }
-      
-        res.status(200).json({
-          success: {
-            profile: profile,
-          },
-        });
-    }
-   
-  });
-

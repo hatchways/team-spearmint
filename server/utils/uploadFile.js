@@ -13,7 +13,7 @@ const uploadFile = (fileName) => {
 
     const params = {
         Bucket: 'profile-pics1',
-        Key: 'test_user', // maybe save as user name
+        Key: "test", // maybe save as user name
         Body: fileContent
     };
 
@@ -26,6 +26,7 @@ const uploadFile = (fileName) => {
     });
 };
 
+module.exports = uploadFile;
 
 
-uploadFile('puppy.jpeg')
+// uploadFile('puppy.jpeg')
