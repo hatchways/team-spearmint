@@ -26,11 +26,11 @@ exports.editProfile = asyncHandler(async (req, res, next) => {
 // @desc Get user profile data
 // @access Private
 exports.loadProfile = asyncHandler(async (req, res, next) => {
-  const profile = await User.findById(req.user.id, "profile");
-
+  const profile = await Profile.findOne({ userId: req.body.id });
+  
   if (!profile) {
     res.status(401);
-    throw new Error("Not authorized");
+    throw new Error("Profile not found!");
   }
 
   res.status(200).json({
