@@ -13,8 +13,11 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import { useAuth } from './context/useAuthContext';
 
 function App(): JSX.Element {
+  const { loggedInUser } = useAuth();
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -24,10 +27,11 @@ function App(): JSX.Element {
               <CssBaseline />
               <Navbar />
               <Switch>
+                <ProtectedRoute loggedInUser={loggedInUser} exact path="/dashboard" component={Dashboard} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route path="/profile/settings" component={Settings} />
+                <ProtectedRoute loggedInUser={loggedInUser} exact path="/dashboard" component={Dashboard} />
+                <ProtectedRoute loggedInUser={loggedInUser} path="/profile/settings" component={Settings} />
                 <Route path="*">
                   <NotFound />
                 </Route>
