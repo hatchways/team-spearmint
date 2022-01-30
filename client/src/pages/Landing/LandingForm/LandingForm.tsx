@@ -62,7 +62,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
             value={values.location}
             onChange={handleChange}
           />
-          <div style={{ display: 'flex' }}>
+          <Box style={{ display: 'flex' }}>
             <FormInputRight
               id="start"
               label="Drop in / Drop off"
@@ -89,7 +89,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
               value={values.end}
               onChange={handleChange}
             />
-          </div>
+          </Box>
 
           <Box marginTop={5}>
             <Button

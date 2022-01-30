@@ -140,7 +140,7 @@ const Navbar: React.FC = () => {
     >
       <Grid xs={4} md={6} item>
         <NavLink className={classes.navbarItem} to="/">
-          <img className={classes.navbarLogo} src={lovingSitterLogo} />
+          <img className={classes.navbarLogo} src={lovingSitterLogo} alt="lovingsitter logo" />
         </NavLink>
       </Grid>
       <Grid xs={8} md={6} item>
