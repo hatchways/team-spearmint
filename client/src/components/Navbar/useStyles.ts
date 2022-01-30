@@ -13,6 +13,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
     position: 'absolute',
     zIndex: 2,
   },
+  transparentnavbarItem: {
+    color: theme.palette.grey[100],
+    fontWeight: 700,
+    textDecoration: 'none',
+    transition: 'color 120ms ease-in-out',
+    '&:hover': {
+      color: theme.palette.primary.main,
+    },
+  },
   navbarItem: {
     color: theme.palette.grey[900],
     fontWeight: 700,

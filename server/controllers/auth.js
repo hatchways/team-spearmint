@@ -63,12 +63,14 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(req.body);
 
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
+    
 
     res.cookie("token", token, {
       httpOnly: true,

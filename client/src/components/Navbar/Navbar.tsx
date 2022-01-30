@@ -20,84 +20,92 @@ import { useStyles } from './useStyles';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
 
-const NavbarButton = styled(Button)({
-  padding: '10px 0px',
-});
-
-const menuItems = [
-  {
-    item: 'Become a Sitter',
-    resource: '/dashboard',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Become a sitter',
-    resource: '/signup?accountType=pet_sitter',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: 'My Jobs',
-    resource: '/my-jobs',
-    canView: [AccountType.PET_SITTER],
-    authenticated: true,
-  },
-  {
-    item: 'My Sitters',
-    resource: '/sitters',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Messages',
-    resource: '/messages',
-    canView: [AccountType.PET_SITTER, AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: (
-      <NavbarButton variant="outlined" size="large" fullWidth>
-        Login
-      </NavbarButton>
-    ),
-    resource: '/login',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: (
-      <NavbarButton variant="contained" size="large" fullWidth disableElevation>
-        Sign up
-      </NavbarButton>
-    ),
-    resource: '/signup',
-    canView: null,
-    authenticated: false,
-  },
-];
-
-const MenuItem: React.FC<{
-  resource: string;
-  item: string | JSX.Element;
-}> = ({ resource, item }) => {
-  const classes = useStyles();
-
-  return (
-    <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
-      <NavLink className={classes.navbarItem} to={resource}>
-        {item}
-      </NavLink>
-    </Grid>
-  );
-};
-
 const Navbar: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { loggedInUser, logout } = useAuth();
   const open = Boolean(anchorEl);
+
+  const NavbarButton = styled(Button)({
+    padding: '10px 0px',
+  });
+
+  const menuItems = [
+    {
+      item: 'Become a Sitter',
+      resource: '/dashboard',
+      canView: [AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: 'Become a sitter',
+      resource: '/signup?accountType=pet_sitter',
+      canView: null,
+      authenticated: false,
+    },
+    {
+      item: 'My Jobs',
+      resource: '/my-jobs',
+      canView: [AccountType.PET_SITTER],
+      authenticated: true,
+    },
+    {
+      item: 'My Sitters',
+      resource: '/sitters',
+      canView: [AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: 'Messages',
+      resource: '/messages',
+      canView: [AccountType.PET_SITTER, AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: (
+        <NavbarButton
+          variant="outlined"
+          size="large"
+          fullWidth
+          color={location.pathname === '/' ? 'secondary' : 'primary'}
+        >
+          Login
+        </NavbarButton>
+      ),
+      resource: '/login',
+      canView: null,
+      authenticated: false,
+    },
+    {
+      item: (
+        <NavbarButton variant="contained" size="large" fullWidth disableElevation>
+          Sign up
+        </NavbarButton>
+      ),
+      resource: '/signup',
+      canView: null,
+      authenticated: false,
+    },
+  ];
+
+  const MenuItem: React.FC<{
+    resource: string;
+    item: string | JSX.Element;
+  }> = ({ resource, item }) => {
+    const classes = useStyles();
+
+    return (
+      <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
+        <NavLink
+          className={location.pathname === '/' ? classes.transparentnavbarItem : classes.navbarItem}
+          to={resource}
+        >
+          {item}
+        </NavLink>
+      </Grid>
+    );
+  };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
