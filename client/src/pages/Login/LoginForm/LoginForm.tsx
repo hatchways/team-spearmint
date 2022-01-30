@@ -28,27 +28,10 @@ interface Props {
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
 
-  const hardCodedData = {
-    success: {
-      message: 'hello world',
-      user: {
-        name: 'Demo User',
-        email: 'demouser@email.com',
-      },
-      profile: {
-        userId: '123456789',
-        name: 'Demo User',
-        description: 'I love pets',
-        gender: 'male',
-        address: 'Las vegas',
-        telephone: '720 765 9876',
-        birthday: new Date('May 01, 1980 00:00:00'),
-        photo: '',
-      },
-      token: '123456abcdef',
-    },
+  const hardCodedCredential = {
+    email: 'johndoe@gmail.com',
+    password: 'johndoe',
   };
 
   return (
@@ -101,15 +84,17 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
           <Box className={classes.buttonsWrapper} marginTop={5}>
             <Button
               onClick={() => {
-                updateLoginContext(hardCodedData.success);
+                values.email = hardCodedCredential.email;
+                values.password = hardCodedCredential.password;
               }}
+              type="submit"
               size="large"
               variant="outlined"
               color="primary"
               className={classes.submit}
               disableElevation
             >
-              Demo
+              {isSubmitting ? <CircularProgress style={{ color: 'primary' }} /> : 'Demo'}
             </Button>
             <Button
               type="submit"
