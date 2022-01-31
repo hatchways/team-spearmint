@@ -1,11 +1,10 @@
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Formik, FormikHelpers, validateYupSchema } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
-import { useAuth } from '../../../context/useAuthContext';
 
 interface Props {
   handleSubmit: (

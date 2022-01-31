@@ -7,6 +7,9 @@ import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
 import { useAuth } from '../../../context/useAuthContext';
 
+import login from '../../../helpers/APICalls/login';
+import { useSnackBar } from '../../../context/useSnackbarContext';
+
 interface Props {
   handleSubmit: (
     {
@@ -32,17 +35,26 @@ interface Props {
 const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
+  const { updateSnackBarMessage } = useSnackBar();
 
-  const hardCodedData = {
-    success: {
-      message: 'hello world',
-      user: {
-        name: 'email@email.com',
-        email: 'password123',
-      },
-      profile: 'profile user',
-      token: '123456abcdef',
-    },
+  const hardCodedCredential = {
+    email: 'johndoe@gmail.com',
+    password: 'johndoe',
+  };
+
+  const handleLogin = () => {
+    login(hardCodedCredential.email, hardCodedCredential.password).then((data) => {
+      if (data.error) {
+        updateSnackBarMessage(data.error.message);
+      } else if (data.success) {
+        updateLoginContext(data.success);
+      } else {
+        // should not get here from backend but this catch is for an unknown issue
+        console.error({ data });
+
+        updateSnackBarMessage('An unexpected error occurred. Please try again');
+      }
+    });
   };
 
   return (
@@ -110,7 +122,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
           <Box className={classes.buttonsWrapper} marginTop={5}>
             <Button
               onClick={() => {
-                updateLoginContext(hardCodedData.success);
+                handleLogin();
               }}
               size="large"
               variant="outlined"
@@ -118,7 +130,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
               className={classes.submit}
               disableElevation
             >
-              Demo
+              {isSubmitting ? <CircularProgress style={{ color: 'primary' }} /> : 'Demo'}
             </Button>
             <Button
               type="submit"
