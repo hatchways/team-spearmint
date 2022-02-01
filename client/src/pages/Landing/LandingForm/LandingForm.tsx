@@ -63,7 +63,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
             onChange={handleChange}
           />
           <Box style={{ display: 'flex' }}>
-            <FormInputRight
+            <FormInputLeft
               id="start"
               label="Drop in / Drop off"
               fullWidth
@@ -76,7 +76,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
               value={values.start}
               onChange={handleChange}
             />
-            <FormInputLeft
+            <FormInputRight
               id="end"
               label=""
               fullWidth

@@ -6,7 +6,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     marginTop: theme.spacing(3),
   },
   '& .MuiInputBase-input': {
-    borderRadius: '8px 0px 0px 8px',
+    borderRadius: '0px 8px 8px 0px',
     border: '1px solid #dbdbdb',
     fontSize: 16,
     width: '100%',
