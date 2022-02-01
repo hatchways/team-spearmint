@@ -1,11 +1,9 @@
 import { Route, RouteProps, Redirect } from 'react-router-dom';
-import { User } from '../../interface/User';
+import { useAuth } from '../../context/useAuthContext';
 
-interface Props extends RouteProps {
-  loggedInUser: User | null | undefined;
-}
+const ProtectedRoute = ({ ...routeProps }: RouteProps) => {
+  const { loggedInUser } = useAuth();
 
-const ProtectedRoute = ({ loggedInUser, ...routeProps }: Props) => {
   if (loggedInUser) {
     return <Route {...routeProps} />;
   }
