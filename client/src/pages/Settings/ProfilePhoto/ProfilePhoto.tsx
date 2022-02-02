@@ -67,12 +67,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
         </Typography>
         <Box textAlign="center" marginTop={5}>
           <form>
-            <input
-              ref={uploadPhotoInput}
-              className={classes.uploadInput}
-              type="file"
-              onChange={(e) => handleUpload(e)}
-            />
+            <input ref={uploadPhotoInput} className={classes.upload} type="file" onChange={(e) => handleUpload(e)} />
           </form>
           <Button
             onClick={() => {
