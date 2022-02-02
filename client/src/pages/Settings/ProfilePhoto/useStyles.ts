@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   deleteText: {
     marginTop: '15px !important',
   },
+  uploadInput: {
+    display: 'none',
+  },
 }));
 
 export default useStyles;
