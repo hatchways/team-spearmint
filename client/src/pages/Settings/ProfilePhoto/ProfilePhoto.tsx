@@ -4,8 +4,10 @@ import Button from '@mui/material/Button';
 import { Box, Typography } from '@mui/material';
 import SettingHeader from '../../../components/SettingsHeader/SettingsHeader';
 import { User } from '../../../interface/User';
-import { ChangeEvent, useState, useRef } from 'react';
+import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import uploadPhoto from '../../../helpers/APICalls/uploadPhoto';
+import deletePhoto from '../../../helpers/APICalls/deletePhoto';
+
 interface Props {
   header: string;
   currentUser?: User; // set to optional but always passed in from settings
@@ -14,22 +16,49 @@ interface Props {
 
 export default function ProfilePhoto({ header, currentUser, currentProfile }: Props): JSX.Element {
   const classes = useStyles();
-  const [profilePhoto, setProfilePhoto] = useState<File>();
+  const [profilePhoto, setProfilePhoto] = useState<File | null>();
+  const [profilePhotoKey, setProfilePhotoKey] = useState<string | undefined | null>();
   const uploadPhotoInput = useRef<HTMLInputElement>(null);
+  //when profile photo page loads, set the profilePhotoKey. Take the currentProfile photo url and extract the name/key.
+  useEffect(() => {
+    if (currentProfile && currentProfile.photo) {
+      const splitUrl = currentProfile.photo.split('/');
+      setProfilePhoto(currentProfile.photo);
+      setProfilePhotoKey(splitUrl[splitUrl.length - 1]);
+    }
+  }, [currentProfile]);
+
+  //on upload set the profile photo so that the image will update instantly and set the profilePhotoKey so that there is the reference to delete it
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    // return setProfilePhoto(e.target.files?.[0]);
-    const imageFormObject = new FormData();
-    // imageFormObject.append('imageName', 'profile-image' + Date.now());
-    imageFormObject.append('image', e.target.files?.[0] || '');
-    uploadPhoto(imageFormObject, currentUser);
+    setProfilePhoto(e.target.files?.[0]);
+    setProfilePhotoKey(e.target.files?.[0].name);
   };
+
+  const handleDelete = () => {
+    deletePhoto(profilePhotoKey, currentProfile._id);
+    setProfilePhoto(null);
+    setProfilePhotoKey(null);
+  };
+
+  //if there is a profilePhoto (as in someone uploaded a photo), then upload this to the backend to the s3 bucket and to the associated profile.
+  useEffect(() => {
+    if (profilePhoto && currentUser) {
+      const imageFormObject = new FormData();
+      imageFormObject.append('image', profilePhoto || '');
+      uploadPhoto(imageFormObject, currentUser);
+    }
+  }, [profilePhoto, currentUser]);
+  console.log(profilePhoto);
+  console.log(profilePhotoKey);
 
   return (
     <>
       <Box className={classes.flexContainer}>
         <SettingHeader header={header} />
-
-        <img className={classes.profilePhoto} src={currentProfile?.photo ? currentProfile.photo : hero}></img>
+        <img
+          className={classes.profilePhoto}
+          src={!profilePhoto ? currentProfile?.photo : URL.createObjectURL(profilePhoto)}
+        ></img>
         <Typography variant="h6" className={classes.picText}>
           Be sure to use a photo that clearly shows your face
         </Typography>
@@ -54,7 +83,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
             Upload a file from your device
           </Button>
         </Box>
-        <Typography variant="subtitle1" className={classes.deleteText}>
+        <Typography onClick={() => handleDelete()} variant="subtitle1" className={classes.deleteText}>
           Delete Photo
         </Typography>
       </Box>
