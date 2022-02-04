@@ -7,6 +7,7 @@ import { User } from '../../../interface/User';
 import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import uploadPhoto from '../../../helpers/APICalls/uploadPhoto';
 import deletePhoto from '../../../helpers/APICalls/deletePhoto';
+import { useSnackBar } from '../../../context/useSnackbarContext';
 
 interface Props {
   header: string;
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export default function ProfilePhoto({ header, currentUser, currentProfile }: Props): JSX.Element {
+  const { updateSnackBarMessage } = useSnackBar();
+
   const classes = useStyles();
   const [profilePhoto, setProfilePhoto] = useState<File | null>();
   const [profilePhotoKey, setProfilePhotoKey] = useState<string | undefined | null>();
@@ -38,6 +41,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
     deletePhoto(profilePhotoKey, currentProfile._id);
     setProfilePhoto(null);
     setProfilePhotoKey(null);
+    updateSnackBarMessage('Photo successfully deleted');
   };
 
   //if there is a profilePhoto (as in someone uploaded a photo), then upload this to the backend to the s3 bucket and to the associated profile.
@@ -46,10 +50,9 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
       const imageFormObject = new FormData();
       imageFormObject.append('image', profilePhoto || '');
       uploadPhoto(imageFormObject, currentUser);
+      updateSnackBarMessage('Photo successfully uploaded');
     }
-  }, [profilePhoto, currentUser]);
-  console.log(profilePhoto);
-  console.log(profilePhotoKey);
+  }, [profilePhoto, currentUser, updateSnackBarMessage]);
 
   return (
     <>
