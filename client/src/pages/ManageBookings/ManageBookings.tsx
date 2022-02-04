@@ -8,6 +8,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { NavLink } from 'react-router-dom';
 import dogPicture from '../../images/landing/hero.jpg';
 
+import MyCalendar from '../../components/MyCalendar/MyCalendar';
+
 const RequestInfo: React.FC<{
   date?: string | Date;
   avatar?: any;
@@ -46,11 +48,12 @@ const RequestInfo: React.FC<{
 
 export default function ManageBookings(): JSX.Element {
   const classes = useStyles();
+  const [dateValue, setDateValue] = useState<Date>(new Date(new Date().getFullYear(), new Date().getMonth(), 20));
 
   return (
     <PageContainer>
-      <Grid sx={{ width: '87%', margin: '0 auto' }} container>
-        <Grid xs={12} md={6} className={classes.leftContainer}>
+      <Grid sx={{ width: '87%', margin: '0 auto' }} spacing={2} container>
+        <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }} className={classes.leftContainer}>
           <Box className={classes.leftWrapper}>
             <CardWrapper>
               <Box className={classes.bookingContent}>
@@ -123,9 +126,13 @@ export default function ManageBookings(): JSX.Element {
             </CardWrapper>
           </Box>
         </Grid>
-        <Grid xs={12} md={6} className={classes.rightContainer}>
+        <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }} className={classes.rightContainer}>
           <Box className={classes.rightWrapper}>
-            <CardWrapper>CALENDAR</CardWrapper>
+            <CardWrapper>
+              <Box className={classes.calendarContainer}>
+                <MyCalendar />
+              </Box>
+            </CardWrapper>
           </Box>
         </Grid>
       </Grid>

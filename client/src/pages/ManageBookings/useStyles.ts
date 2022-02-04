@@ -96,6 +96,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     gap: 15,
   },
+  calendarContainer: {
+    width: '100%',
+    textAlign: 'center',
+    padding: '30px 10px',
+  },
 }));
 
 export default useStyles;
