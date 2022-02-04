@@ -7,10 +7,16 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Open Sans", "sans-serif"',
+    fontFamily: '"Poppins", "Roboto", "sans-serif"',
     fontSize: 12,
     button: {
       fontWeight: 700,
+    },
+    caption: {
+      fontWeight: 700,
+    },
+    body1: {
+      fontWeight: 600,
     },
   },
 });
