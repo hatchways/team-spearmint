@@ -16,7 +16,7 @@ import { AccountType } from '../../types/AccountType';
 
 import lovingSitterLogo from '../../images/logo.svg';
 import { useStyles } from './useStyles';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
 
 const NavbarButton = styled(Button)({
@@ -131,7 +131,9 @@ const Navbar: React.FC = () => {
       container
     >
       <Grid xs={4} md={6} item>
-        <img className={classes.navbarLogo} src={lovingSitterLogo} />
+        <Link to="/profiles">
+          <img className={classes.navbarLogo} src={lovingSitterLogo} />
+        </Link>
       </Grid>
       <Grid xs={8} md={6} item>
         <Grid container alignItems="center" gap={2} justifyContent="flex-end">
