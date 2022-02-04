@@ -96,6 +96,7 @@ const Navbar: React.FC = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { loggedInUser, logout } = useAuth();
+
   const open = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
