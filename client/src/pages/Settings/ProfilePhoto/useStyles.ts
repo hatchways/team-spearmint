@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   deleteText: {
     marginTop: '15px !important',
+    cursor: 'pointer',
   },
   uploadInput: {
     display: 'none',
