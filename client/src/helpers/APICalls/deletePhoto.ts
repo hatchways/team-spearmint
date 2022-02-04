@@ -7,7 +7,7 @@ const deletePhoto = async (key: string | undefined | null, profileId: string) =>
     body: JSON.stringify({ id: profileId }),
     credentials: 'include',
   };
-  console.log('in delete Photo, this is', key, 'this is', profileId);
+
   return await fetch(`/deleteImage/${key}`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
