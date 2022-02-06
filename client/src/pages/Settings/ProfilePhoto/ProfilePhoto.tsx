@@ -44,7 +44,6 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
     updateSnackBarMessage('Photo successfully deleted');
   };
 
-  //if there is a profilePhoto (as in someone uploaded a photo), then upload this to the backend to the s3 bucket and to the associated profile.
   useEffect(() => {
     if (profilePhoto && currentUser) {
       const imageFormObject = new FormData();
@@ -59,6 +58,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
       <Box className={classes.flexContainer}>
         <SettingHeader header={header} />
         <img
+          alt={'Profile Photo'}
           className={classes.profilePhoto}
           src={!profilePhoto ? currentProfile?.photo : URL.createObjectURL(profilePhoto)}
         ></img>
