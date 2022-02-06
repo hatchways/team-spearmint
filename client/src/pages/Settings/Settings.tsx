@@ -45,10 +45,8 @@ export default function Settings(): JSX.Element {
   const classes = useStyles();
 
   if (loggedInUser === undefined) return <CircularProgress />;
-  //removing condition to check for profile for now...!loggedInUser || !profile
   if (!loggedInUser) {
     history.push('/login');
-    // loading for a split seconds until history.push works
     return <CircularProgress />;
   }
 
