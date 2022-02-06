@@ -33,24 +33,23 @@ const upload = multer({
 
 router.post('/upload-image', upload.single('image'), function(req, res, next) {
   if (!req.file) {
-    console.log('in here');
     res.status(400).send("Trouble uploading image, please try again!")
   } else {
-    Profile.findOne({ userId: req.user.id }, (error, currentProfile) => {
-      if (!currentProfile) {
-        res.status(404).send("Profile not found!")
-      } else {
-        currentProfile.photo = req.file.location
+    const profile = await Profile.findOne({ userId: req.params.id });
 
-        currentProfile.save(function (error) {
-          if (error) {
-            res.status(500).send(error)
-          } else {
-            res.status(200).send("Image successfully uploaded and saved to profile!")
-          }
-        });
-      }
-    })
+    if (!profile) {
+      res.status(404).send("Profile not found")
+    } else {
+      profile.photo = req.file.location
+
+      profile.save((error) => {
+        if (error) {
+          res.status(500).send(error)
+        } else {
+          res.status(200).send("Image successfully uploaded and saved to profile")
+        }
+      })
+    }
   }
 });
 
