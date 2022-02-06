@@ -5,7 +5,6 @@ import { User } from '../../interface/User';
 const uploadPhoto = async (data: FormData, user: User | undefined): Promise<AuthApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
-    // headers: { 'Content-Type': 'application/json' },
     body: data,
     credentials: 'include',
   };

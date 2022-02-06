@@ -22,7 +22,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
   const [profilePhoto, setProfilePhoto] = useState<File | null>();
   const [profilePhotoKey, setProfilePhotoKey] = useState<string | undefined | null>();
   const uploadPhotoInput = useRef<HTMLInputElement>(null);
-  //when profile photo page loads, set the profilePhotoKey. Take the currentProfile photo url and extract the name/key.
+
   useEffect(() => {
     if (currentProfile && currentProfile.photo) {
       const splitUrl = currentProfile.photo.split('/');
@@ -31,7 +31,6 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
     }
   }, [currentProfile]);
 
-  //on upload set the profile photo so that the image will update instantly and set the profilePhotoKey so that there is the reference to delete it
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
     setProfilePhoto(e.target.files?.[0]);
     setProfilePhotoKey(e.target.files?.[0].name);
@@ -44,7 +43,6 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
     updateSnackBarMessage('Photo successfully deleted');
   };
 
-  //if there is a profilePhoto (as in someone uploaded a photo), then upload this to the backend to the s3 bucket and to the associated profile.
   useEffect(() => {
     if (profilePhoto && currentUser) {
       const imageFormObject = new FormData();
@@ -59,6 +57,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
       <Box className={classes.flexContainer}>
         <SettingHeader header={header} />
         <img
+          alt={'Profile Photo'}
           className={classes.profilePhoto}
           src={!profilePhoto ? currentProfile?.photo : URL.createObjectURL(profilePhoto)}
         ></img>
