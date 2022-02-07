@@ -1,43 +1,17 @@
 import { Button, TextField, Typography } from '@mui/material';
 import useStyles from './useStyles';
 import hero from '../../images/landing/hero.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getProfiles } from '../../helpers/APICalls/getProfiles';
 
 export default function Profiles() {
   const classes = useStyles();
+  const [profiles, setProfiles] = useState([]);
 
-  const fakeProfile = {
-    photo: hero,
-    name: 'John Bean',
-    blurb: 'Dog care helper',
-    stars: 5,
-    description: 'I have lots of experience working with and taking care of dogs of all breeds!',
-    location: 'Seattle, Washington',
-    rate: '15$',
-  };
-  const fakeProfile2 = {
-    photo: hero,
-    name: 'Jill Peanut',
-    blurb: 'Dog care walker',
-    stars: 4,
-    description: 'I love dogs!',
-    location: 'Seattle, Washington',
-    rate: '17$',
-  };
-  const profiles = [
-    fakeProfile,
-    fakeProfile,
-    fakeProfile,
-    fakeProfile,
-    fakeProfile,
-    fakeProfile,
-    fakeProfile2,
-    fakeProfile2,
-    fakeProfile2,
-    fakeProfile2,
-    fakeProfile2,
-    fakeProfile2,
-  ];
+  useEffect(() => {
+    getProfiles().then((resp) => setProfiles(resp.profiles));
+  }, []);
+
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
 
@@ -54,7 +28,7 @@ export default function Profiles() {
           </Typography>
           <div className={classes.innerFlexRowProfileContainer}>
             <Typography variant="subtitle2" className={classes.location}>
-              {profile.location}
+              {profile.address}
             </Typography>
             <Typography variant="subtitle2">{profile.rate}</Typography>
           </div>
@@ -82,7 +56,6 @@ export default function Profiles() {
         <div className={classes.flexRowContainer}>
           <TextField
             id="location"
-            // label="location"
             fullWidth
             margin="normal"
             name="location"
@@ -98,12 +71,7 @@ export default function Profiles() {
             className={classes.date}
             id="dates"
             placeholder="Your dates"
-            // label={<Typography className={classes.label}>dates</Typography>}
-            // fullWidth
             margin="normal"
-            // InputProps={{
-            //   classes: { input: classes.inputs },
-            // }}
             type="date"
             autoComplete="current-dates"
             // helperText={touched.dates ? errors.dates : ''}
@@ -133,7 +101,7 @@ export default function Profiles() {
           className={classes.button}
           disableElevation
         >
-          Show More{/* {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Login'} */}
+          Show More
         </Button>
       </div>
     </>

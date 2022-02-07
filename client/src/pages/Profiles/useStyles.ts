@@ -71,6 +71,7 @@ const useStyles = makeStyles(() => ({
   },
   button: {
     marginTop: '30px !important',
+    marginBottom: '40px !important',
   },
 }));
 
