@@ -2,15 +2,29 @@ const mongoose = require("mongoose");
 
 const requestSchema = new mongoose.Schema(
     {
-        userId: {
+        ownerId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User'
+        },
+        ownerName: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        ownerPhoto: {
+            type: String,
+            required: true,
         },
         sitterId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User'
+        },
+        sitterName: {
+            type: String,
+            required: true,
+            unique: true
         },
         location: {
             type: String,

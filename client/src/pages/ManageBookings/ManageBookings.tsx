@@ -1,54 +1,89 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import clsx from 'clsx';
-import { Box, Grid, Typography, Avatar } from '@mui/material';
+import { Box, Grid, Typography, Avatar, CircularProgress } from '@mui/material';
 import useStyles from './useStyles';
 import CardWrapper from '../../components/CardWrapper/CardWrapper';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { NavLink } from 'react-router-dom';
-import dogPicture from '../../images/landing/hero.jpg';
-
+import getSitterRequests from '../../helpers/APICalls/sitterRequests';
+import changeStatus from '../../helpers/APICalls/changeStatus';
+import { useAuth } from '../../context/useAuthContext';
 import MyCalendar from '../../components/MyCalendar/MyCalendar';
-
-const RequestInfo: React.FC<{
-  date?: string | Date;
-  avatar?: any;
-  name?: string;
-  status?: string;
-  size?: any;
-}> = ({ date, avatar, name, status, size }) => {
-  const classes = useStyles();
-
-  return (
-    <Box className={clsx(classes.requestInfo, size === 'large' && classes.requestInfoLarge)}>
-      <Grid xs={9} item>
-        <Typography variant={size === 'large' ? 'h6' : 'body1'} gutterBottom>
-          {date}
-        </Typography>
-        <Box className={classes.nameAvatar}>
-          <Avatar
-            alt="Profile Image"
-            src={avatar}
-            sx={size === 'large' ? { width: 50, height: 50 } : { width: 40, height: 40 }}
-          />
-          <Typography variant={size === 'large' ? 'h6' : 'body1'}>{name}</Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} item className={classes.statusAndIcon}>
-        <Typography variant="caption" className={classes.status}>
-          {size === 'large' ? '' : status}
-        </Typography>
-        <NavLink to="" className={clsx(classes.settingsIcon, size === 'large' && classes.settingsIconLarge)}>
-          <SettingsIcon color="disabled" fontSize="small" />
-        </NavLink>
-      </Grid>
-    </Box>
-  );
-};
+import { format } from 'date-fns';
+import RequestInfo from './RequestInfo/RequestInfo';
+import { RequestApiData } from '../../interface/RequestApiData';
 
 export default function ManageBookings(): JSX.Element {
   const classes = useStyles();
-  const [dateValue, setDateValue] = useState<Date>(new Date(new Date().getFullYear(), new Date().getMonth(), 20));
+  const history = useHistory();
+  const { loggedInUser } = useAuth();
+  const { sitterRequests } = useAuth();
+  const { updateSitterRequestsContext } = useAuth();
+
+  const handleStatus = (
+    accepted: boolean,
+    declined: boolean,
+    requestId: string,
+    sitterId: string,
+    avatar?: string | undefined,
+  ): void => {
+    changeStatus(accepted, declined, requestId, sitterId, avatar).then((res) => {
+      const index = sitterRequests.findIndex((request: RequestApiData) => {
+        return request._id === requestId;
+      });
+      if (index !== -1) {
+        const newSitterRequests = [...sitterRequests];
+        newSitterRequests[index] = res;
+        console.log(res);
+        updateSitterRequestsContext(newSitterRequests);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (loggedInUser) {
+      getSitterRequests(loggedInUser.id).then((res) => updateSitterRequestsContext(res));
+    }
+  }, [loggedInUser]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (loggedInUser === undefined) return <CircularProgress />;
+  if (!loggedInUser) {
+    history.push('/login');
+    return <CircularProgress />;
+  }
+
+  let pastRequests;
+  let currentRequests;
+  let nextRequest;
+  if (sitterRequests) {
+    const requests = sitterRequests.map((request: RequestApiData) => {
+      return {
+        ...request,
+        start: new Date(request.start),
+        end: new Date(request.end),
+      };
+    });
+    const sortedRequests = requests.sort((a: any, b: any) => a.start - b.start);
+
+    const formatedRequests = sortedRequests.map((request: RequestApiData) => {
+      return {
+        ...request,
+        start: format(new Date(request.start), 'd MMMM yyyy, h'),
+        end: format(new Date(request.end), 'h a'),
+      };
+    });
+
+    pastRequests = formatedRequests
+      .filter((request: RequestApiData) => {
+        return new Date(request.start).getTime() < new Date().getTime();
+      })
+      .reverse();
+
+    currentRequests = formatedRequests.filter((request: RequestApiData) => {
+      return new Date().getTime() < new Date(request.start).getTime();
+    });
+
+    nextRequest = currentRequests.shift();
+  }
 
   return (
     <PageContainer>
@@ -60,14 +95,28 @@ export default function ManageBookings(): JSX.Element {
                 <Typography className={classes.title} variant="caption" gutterBottom>
                   Your Next booking:
                 </Typography>
-                <RequestInfo
-                  key="123"
-                  date="5 April 2020, 10-12 AM"
-                  avatar={dogPicture}
-                  name="Norma Byers"
-                  status="ddd"
-                  size="large"
-                />
+                {nextRequest && (
+                  <RequestInfo
+                    key={nextRequest._id}
+                    requestId={nextRequest._id}
+                    sitterId={nextRequest.sitterId}
+                    date={`${nextRequest.start}-${nextRequest.end}`}
+                    start={nextRequest.start}
+                    avatar={nextRequest.ownerPhoto}
+                    name={nextRequest.ownerName}
+                    status={
+                      nextRequest.accepted === false
+                        ? nextRequest.declined === false
+                          ? 'pending'
+                          : 'declined'
+                        : 'accepted'
+                    }
+                    accepted={nextRequest.accepted}
+                    declined={nextRequest.declined}
+                    size="large"
+                    handleStatus={handleStatus}
+                  />
+                )}
               </Box>
             </CardWrapper>
             <CardWrapper>
@@ -78,20 +127,28 @@ export default function ManageBookings(): JSX.Element {
               </Box>
               <Box className={classes.scrollArea}>
                 <Box className={classes.requests}>
-                  <RequestInfo
-                    key="123"
-                    date="5 April 2020, 10-12 AM"
-                    avatar={dogPicture}
-                    name="Norma Byers"
-                    status="Accepted"
-                  />
-                  <RequestInfo
-                    key="123"
-                    date="5 April 2020, 10-12 AM"
-                    avatar={dogPicture}
-                    name="Norma Byers"
-                    status="Accepted"
-                  />
+                  {currentRequests &&
+                    currentRequests.map((request: any) => (
+                      <RequestInfo
+                        key={request._id}
+                        requestId={request._id}
+                        sitterId={request.sitterId}
+                        date={`${request.start}-${request.end}`}
+                        start={request.start}
+                        avatar={request.ownerPhoto}
+                        name={request.ownerName}
+                        status={
+                          request.accepted === false
+                            ? request.declined === false
+                              ? 'pending'
+                              : 'declined'
+                            : 'accepted'
+                        }
+                        accepted={request.accepted}
+                        declined={request.declined}
+                        handleStatus={handleStatus}
+                      />
+                    ))}
                 </Box>
 
                 <Box className={classes.bookingContent}>
@@ -100,27 +157,28 @@ export default function ManageBookings(): JSX.Element {
                   </Typography>
                 </Box>
                 <Box className={classes.requests}>
-                  <RequestInfo
-                    key="123"
-                    date="5 April 2020, 10-12 AM"
-                    avatar={dogPicture}
-                    name="Norma Byers"
-                    status="Accepted"
-                  />
-                  <RequestInfo
-                    key="123"
-                    date="5 April 2020, 10-12 AM"
-                    avatar={dogPicture}
-                    name="Norma Byers"
-                    status="Accepted"
-                  />
-                  <RequestInfo
-                    key="123"
-                    date="5 April 2020, 10-12 AM"
-                    avatar={dogPicture}
-                    name="Norma Byers"
-                    status="Accepted"
-                  />
+                  {pastRequests &&
+                    pastRequests.map((request: any) => (
+                      <RequestInfo
+                        key={request._id}
+                        requestId={request._id}
+                        sitterId={request.sitterId}
+                        date={`${request.start}-${request.end}`}
+                        start={request.start}
+                        avatar={request.ownerPhoto}
+                        name={request.ownerName}
+                        status={
+                          request.accepted === false
+                            ? request.declined === false
+                              ? 'pending'
+                              : 'declined'
+                            : 'accepted'
+                        }
+                        accepted={request.accepted}
+                        declined={request.declined}
+                        handleStatus={handleStatus}
+                      />
+                    ))}
                 </Box>
               </Box>
             </CardWrapper>

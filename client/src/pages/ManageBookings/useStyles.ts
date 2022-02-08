@@ -35,43 +35,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     textTransform: 'uppercase',
     fontWeight: 'bolder',
   },
-  requestInfo: {
-    display: 'flex',
-    alignItems: 'center',
-    border: '1px solid rgba(227, 227, 227, 0.9)',
-    borderRadius: 5,
-    marginTop: 0,
-    padding: 15,
-  },
-  requestInfoLarge: {
-    display: 'flex',
-    alignItems: 'center',
-    border: 'none',
-    marginTop: 10,
-    padding: 0,
-  },
-  nameAvatar: {
-    display: 'flex',
-    justifyContent: 'start',
-    alignItems: 'center',
-    gap: 12,
-  },
-  statusAndIcon: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  status: {
-    textTransform: 'uppercase',
-    color: 'rgba(200, 200, 200, 0.9)',
-  },
-  settingsIcon: {
-    marginTop: -30,
-    marginRight: -5,
-  },
-  settingsIconLarge: {
-    marginTop: -80,
-    marginRight: 10,
-  },
   bookingContent: {
     marginTop: 30,
     marginBottom: 10,
