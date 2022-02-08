@@ -6,9 +6,10 @@ import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
 import { useAuth } from '../../../context/useAuthContext';
-
 import login from '../../../helpers/APICalls/login';
 import { useSnackBar } from '../../../context/useSnackbarContext';
+import { demoUserCredential } from '../../../helpers/DemoUserCredential/DemoUserCredential';
+import DemoButton from '../../../components/DemoButton/DemoButton';
 
 interface Props {
   handleSubmit: (
@@ -36,26 +37,6 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
-
-  const hardCodedCredential = {
-    email: 'johndoe@gmail.com',
-    password: 'johndoe',
-  };
-
-  const handleLogin = () => {
-    login(hardCodedCredential.email, hardCodedCredential.password).then((data) => {
-      if (data.error) {
-        updateSnackBarMessage(data.error.message);
-      } else if (data.success) {
-        updateLoginContext(data.success);
-      } else {
-        // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
-      }
-    });
-  };
 
   return (
     <Formik
@@ -119,19 +100,8 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             onChange={handleChange}
           />
 
-          <Box className={classes.buttonsWrapper} marginTop={5}>
-            <Button
-              onClick={() => {
-                handleLogin();
-              }}
-              size="large"
-              variant="outlined"
-              color="primary"
-              className={classes.submit}
-              disableElevation
-            >
-              {isSubmitting ? <CircularProgress style={{ color: 'primary' }} /> : 'Demo'}
-            </Button>
+          <Box display="flex" alignItems="center" justifyContent="space-around" marginTop={5}>
+            <DemoButton />
             <Button
               type="submit"
               size="large"

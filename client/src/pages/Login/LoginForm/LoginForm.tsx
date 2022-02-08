@@ -5,6 +5,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
+import DemoButton from '../../../components/DemoButton/DemoButton';
 
 interface Props {
   handleSubmit: (
@@ -27,11 +28,6 @@ interface Props {
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
   const classes = useStyles();
-
-  const hardCodedCredential = {
-    email: 'johndoe@gmail.com',
-    password: 'johndoe',
-  };
 
   return (
     <Formik
@@ -80,21 +76,8 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             onChange={handleChange}
           />
 
-          <Box className={classes.buttonsWrapper} marginTop={5}>
-            <Button
-              onClick={() => {
-                values.email = hardCodedCredential.email;
-                values.password = hardCodedCredential.password;
-              }}
-              type="submit"
-              size="large"
-              variant="outlined"
-              color="primary"
-              className={classes.submit}
-              disableElevation
-            >
-              {isSubmitting ? <CircularProgress style={{ color: 'primary' }} /> : 'Demo'}
-            </Button>
+          <Box display="flex" alignItems="center" justifyContent="space-around" marginTop={5}>
+            <DemoButton />
             <Button
               type="submit"
               size="large"

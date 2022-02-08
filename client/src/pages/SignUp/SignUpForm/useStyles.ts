@@ -19,10 +19,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   forgot: {
     paddingRight: 10,
   },
-  buttonsWrapper: {
-    display: 'flex',
-    justifyContent: 'space-around',
-  },
   submit: {
     margin: theme.spacing(3, 2, 2),
     padding: 10,
