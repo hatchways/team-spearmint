@@ -1,6 +1,6 @@
 const Availability = require("../models/Availability");
 const asyncHandler = require("express-async-handler");
-
+const mongoose = require("mongoose");
 
 // New routes for availability.
 // /availability <- to create a schedule
@@ -29,3 +29,19 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
       }
     })
   });
+
+  // @route GET /availability/:scheduleId
+  // @desc get a specific schedule from a profile 
+  // @access public
+  exports.getSchedule = asyncHandler(async (req, res, next) => {
+    const schedule = await Availability.findOne({ _id: req.params.scheduleId})
+
+    if(!schedule){
+      res.status(400)
+      throw new Error("There is no schedule found!")
+    } else {
+      res.status(200).send(schedule)
+    }
+  })
+
+  
