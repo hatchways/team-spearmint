@@ -2,15 +2,29 @@ const mongoose = require("mongoose");
 
 const requestSchema = new mongoose.Schema(
     {
-        user_id: {
+        ownerId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User'
         },
-        sitter_id: {
+        ownerName: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        ownerPhoto: {
+            type: String,
+            required: true,
+        },
+        sitterId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'User'
+        },
+        sitterName: {
+            type: String,
+            required: true,
+            unique: true
         },
         location: {
             type: String,
@@ -37,15 +51,15 @@ const requestSchema = new mongoose.Schema(
         },
         accepted: {
             type: Boolean,
-            default: False,
+            default: false,
         },
         declined: {
             type: Boolean,
-            default: False,
+            default: false,
         },
-        paid : {
+        paid: {
             type: Boolean,
-            default: False,
+            default: false,
         }
     },
     {
