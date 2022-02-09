@@ -29,7 +29,7 @@ function App(): JSX.Element {
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route path="/profile/settings" component={Settings} />
-                <Route exact path="/manageBookings" component={ManageBookings} />
+                <Route exact path="/manage-bookings" component={ManageBookings} />
                 <Route path="*">
                   <NotFound />
                 </Route>
