@@ -92,6 +92,10 @@ const availabilitySchema = new mongoose.Schema({
       }
     }
   },
+  active: {
+    type: Boolean, 
+    default: false 
+  }
 });
 
 module.exports = Availability = mongoose.model("availability", availabilitySchema);

@@ -1,6 +1,7 @@
 const Availability = require("../models/Availability");
 const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
+const { ResultWithContext } = require("express-validator/src/chain");
 
 // New routes for availability.
 // /availability <- to create a schedule
@@ -44,4 +45,24 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     }
   })
 
-  
+  // @route GET /availability/active
+  // @desc get a profiles active schedule
+  // @access public
+
+  exports.getActiveSchedule = asyncHandler(async (req, res, next) => {
+    const schedules = await Availability.find({ profile: req.query.profileId })
+
+    if (!schedules){
+      res.status(400)
+      throw new Error("There are no schedules!")
+    } else {
+      const activeSchedule = schedules.filter((schedule) => schedule.active )
+
+      if(!activeSchedule){
+        res.status(400)
+        throw new Error("There is no active schedule!")
+      } else {
+        res.status(200).send(activeSchedule)
+      }
+    }
+  })
