@@ -115,12 +115,11 @@ const Navbar: React.FC = () => {
     handleClose();
     logout();
   };
-  const [profile, setProfile] = useState<Profile>();
+  const [profile, setProfile] = useState<Profile>({ accountType: 'initial' });
 
   const renderMenuItems = () => {
-    // Add a different view if the profile is null? Have a link suggesting them to create a profile?
     return menuItems.map((menu) => {
-      if (menu.authenticated && menu.canView?.includes(profile?.accountType || '')) {
+      if (menu.authenticated && menu.canView?.includes(profile?.accountType)) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
         if (!menu.authenticated) {
@@ -134,16 +133,17 @@ const Navbar: React.FC = () => {
     if (loggedInUser) {
       async function getProfile() {
         const loadedProfile = await loadProfile(loggedInUser?.id);
-        setProfile(loadedProfile);
+
+        if (!loadedProfile) {
+          updateSnackBarMessage('Profile not found');
+        } else {
+          setProfile(loadedProfile);
+        }
       }
 
       getProfile();
     }
-  }, [loggedInUser]);
-
-  useEffect(() => {
-    if (profile?.error && updateSnackBarMessage) updateSnackBarMessage('Profile not found!');
-  }, [profile, updateSnackBarMessage]);
+  }, [loggedInUser, updateSnackBarMessage]);
 
   return (
     <Grid
