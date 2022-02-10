@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: '1px 1px 5px lightgrey, -1px -1px 5px lightgrey',
     marginRight: 40,
     textAlign: 'center',
+    position: 'relative',
   },
   profilePic: {
     height: 80,
@@ -18,7 +19,10 @@ const useStyles = makeStyles(() => ({
     width: '70%',
   },
   innerFlexRowProfileContainer: {
+    position: 'absolute',
+    bottom: 10,
     marginTop: '30px',
+    width: '80%',
   },
   location: {
     marginRight: '60px !important',

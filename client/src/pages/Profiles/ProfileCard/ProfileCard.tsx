@@ -30,7 +30,7 @@ export default function ProfileCard({ profile }: any) {
           <Typography variant="subtitle2" className={classes.location}>
             {profile.address}
           </Typography>
-          <Typography variant="subtitle2">{rates[3]}</Typography>
+          <Typography variant="subtitle2">{rates[3]}/hr</Typography>
         </Box>
       </Box>
     </>
