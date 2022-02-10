@@ -45,13 +45,7 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
 // @access Public
 
 exports.loadProfiles = asyncHandler(async (req, res, next) => {
-  const loadProfiles = await Profile.find({})
- 
-  if (!loadProfiles) {
-    res.status(400)
-    throw new Error("No profiles found!")
-  } else {
-    const pet_sitters = loadProfiles.filter((profile) => profile.accountType === 'pet_sitter')
+  const pet_sitters = await Profile.find({ accountType: 'pet_sitter'})
+
     res.status(200).send({ profiles: pet_sitters})
-  }
 });
