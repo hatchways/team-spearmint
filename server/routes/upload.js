@@ -31,7 +31,7 @@ const upload = multer({
   }
 });
 
-router.post('/upload-image', upload.single('image'), function(req, res, next) {
+router.post('/upload-image/:id', upload.single('image'), async function(req, res, next) {
   if (!req.file) {
     res.status(400).send("Trouble uploading image, please try again!")
   } else {
@@ -53,22 +53,22 @@ router.post('/upload-image', upload.single('image'), function(req, res, next) {
   }
 });
 
-router.post('/deleteImage/:key', async function(req, res, next) {
+router.delete('/delete-image/:key', async function(req, res, next) {
+    console.log(req)
   const profile = await Profile.findById(req.body.id);
 
   if(profile){
     profile.photo = null 
     profile.save(function (error) {
       if (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
       } else {
         deletePhoto(req.params.key)
         .then((resp) => {
-          console.log("successfully deleted")
           res.status(200).send('deleted')
         })
         .catch((error) => {
-          res.status(400).send(error)
+          res.status(500).send(error)
         })
       }
     });
