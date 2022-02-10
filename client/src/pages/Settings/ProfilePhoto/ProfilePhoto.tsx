@@ -62,7 +62,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
       upload();
     }
   }, [profilePhoto, currentUser, updateSnackBarMessage]);
-  console.log(profilePhoto);
+
   return (
     <>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100%">
@@ -88,7 +88,6 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
             onClick={() => {
               uploadPhotoInput.current?.click();
             }}
-            // type="submit"
             size="large"
             variant="contained"
             className={classes.submit}
