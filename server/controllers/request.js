@@ -2,98 +2,82 @@ const User = require("../models/User");
 const Profile = require("../models/Profile");
 const Request = require("../models/Request");
 
-exports.createRequest = async (req, res, next) => {
-    const { ownerId, sitterId } = req.body;
+exports.createRequest = async (req, res) => {
+    const { ownerId, sitterId, start, end, animalType, usefulInfo } = req.body;
+    console.log(new Date());
+    try {
+        const ownerExists = await User.findOne({ ownerId });
+        if (!ownerExists) return res.status(404).json({ message: "Owner doesn't exist" });
 
-    const ownerExists = await User.findOne({ ownerId });
-    if (!ownerExists) {
-        res.status(400);
-        throw new Error("Can't find any pet owner with this id");
-    }
+        const sitterExists = await User.findOne({ sitterId });
+        if (!sitterExists) return res.status(404).json({ message: "Sitter doesn't exist" });
 
-    const sitterExists = await User.findOne({ sitterId });
-    if (!sitterExists) {
-        res.status(400);
-        throw new Error("Can't find any petsitter with this id");
-    }
+        const request = await Request.create(req.body);
+        if (!request) return res.status(404).json({ message: "unable to create a new request" });
 
-    const ownerProfile = await Profile.findOne({ userId: ownerId });
-    const sitterProfile = await Profile.findOne({ userId: sitterId });
-    req.body.ownerName = ownerProfile.name;
-    req.body.sitterName = sitterProfile.name;
-    const request = await Request.create(req.body);
-    if (request) {
-        res.status(201).json(request);
-    } else {
-        res.status(400);
-        throw new Error("Invalid request data");
+        res.status(200).json(request);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 };
 
-exports.getRequests = async (req, res, next) => {
-    const { userId } = req.body;
+exports.getRequests = async (req, res) => {
+    try {
+        const userExists = await User.findOne({ _id: req.user.id });
+        if (!userExists) return res.status(404).json({ message: "User doesn't exist" });
 
-    const userExists = await User.findOne({ userId });
-    if (!userExists) {
-        res.status(400);
-        throw new Error("Can't find any user with this id");
-    }
+        const userProfile = await Profile.findOne({ userId: req.user.id});
+        const typeOfAccount = userProfile.accountType;
 
-    const requests = await Request.find({ $or: [{ ownerId: userId }, { sitterId: userId }] });
-    if (requests) {
-        res.status(201).json(requests);
-    }
-};
+        if(typeOfAccount === 'pet_sitter') {
+            const requests = await Request.find({ sitterId: req.user.id }).lean();
+            if (!requests) return res.status(404).json({ message: "Something went wrong!!!" });
 
-exports.getSitterRequests = async (req, res, next) => {
-    const { id } = req.params;
+            const requestsWithOwnerInfo = await Promise.all(
+                requests.map(async (request) => {
+                    const ownerProfile = await Profile.findOne({ userId: request.ownerId });
+                    request.ownerName = ownerProfile.name;
+                    request.ownerPhoto = ownerProfile.photo;
+                    return request;
+                })
+            );
+            return res.status(200).json(requestsWithOwnerInfo);
+        }
+        if(typeOfAccount === 'pet_owner') {
+            const requests = await Request.find({ ownerId: req.user.id }).lean();
+            if (!requests) return res.status(404).json({ message: "Something went wrong!!!" });
 
-    const userExists = await User.findOne({ id });
-    if (!userExists) {
-        res.status(400);
-        throw new Error("Can't find any user with this id");
-    }
-
-    const requests = await Request.find({ sitterId: id });
-    if (requests) {
-        const sitterRequestsWithOwnerPhoto = await Promise.all(requests.map(async (request) => {
-            const ownerProfile = await Profile.findOne({userId : request.ownerId});
-            request.ownerPhoto = ownerProfile.photo;
-            return request;
-        }));
-        res.status(201).json(sitterRequestsWithOwnerPhoto);
-    }
-};
-
-exports.getOwnerRequests = async (req, res, next) => {
-    const { userId } = req.body;
-
-    const userExists = await User.findOne({ userId });
-    if (!userExists) {
-        res.status(400);
-        throw new Error("Can't find any user with this id");
-    }
-
-    const requests = await Request.find({ ownerId: userId });
-    if (requests) {
-        res.status(201).json(requests);
+            const requestsWithSitterInfo = await Promise.all(
+                requests.map(async (request) => {
+                    const sitterProfile = await Profile.findOne({ userId: request.sitterId });
+                    request.sitterName = sitterProfile.name;
+                    request.sitterPhoto = sitterProfile.photo;
+                    return request;
+                })
+            );
+            return res.status(200).json(requestsWithSitterInfo);
+        }
+            
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 };
 
-exports.updateRequest = async (req, res, next) => {
-    const { sitterId, requestId, accepted, declined, avatar } = req.body;
+exports.updateRequest = async (req, res) => {
+    const { requestId, newStatus } = req.body;
 
-    const userExists = await User.findOne({ sitterId});
-    if (!userExists) {
-        res.status(400);
-        throw new Error("Can't find any user with this id");
-    }
+    try {
+        const userExists = await User.findOne({ _id: req.user.id });
+        if (!userExists) return res.status(404).json({ message: "User doesn't exist" });
 
-    const requestUpdated = await Request.findOneAndUpdate({_id: requestId }, { accepted: accepted, declined: declined }, { new: true });
-    if (requestUpdated) {
-        requestUpdated.ownerPhoto = avatar;
+        const theRequest = await Request.findOne({ _id: requestId });
+        if(theRequest.sitterId.valueOf() !== req.user.id) return res.status(404).json({ message: "This sitter doesn't own this request" });
+
+        const requestUpdated = await Request.findOneAndUpdate({ _id: requestId }, { status: newStatus }, { new: true });
+        if (!requestUpdated) return res.status(404).json({ message: "Something went wrong!!!" });
+
         res.status(200).json(requestUpdated);
-    } else {
-        throw new Error("Couldn't update the request");
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 };
