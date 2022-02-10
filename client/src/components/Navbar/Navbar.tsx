@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
     >
       <Grid xs={4} md={6} item>
         <Link to="/profiles">
-          <img className={classes.navbarLogo} src={lovingSitterLogo} />
+          <img alt="logo" className={classes.navbarLogo} src={lovingSitterLogo} />
         </Link>
       </Grid>
       <Grid xs={8} md={6} item>

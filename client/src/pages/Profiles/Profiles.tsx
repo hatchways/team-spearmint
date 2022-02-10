@@ -1,41 +1,33 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography, Box } from '@mui/material';
 import useStyles from './useStyles';
 import hero from '../../images/landing/hero.jpg';
 import { useEffect, useState } from 'react';
 import { getProfiles } from '../../helpers/APICalls/getProfiles';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import ProfileCard from './ProfileCard/ProfileCard';
 
 export default function Profiles() {
   const classes = useStyles();
+  const { updateSnackBarMessage } = useSnackBar();
+
   const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    getProfiles().then((resp) => setProfiles(resp.profiles));
-  }, []);
+    const loadProfiles = async () => {
+      const profiles = await getProfiles();
+
+      if (profiles) {
+        setProfiles(profiles.profiles);
+      } else {
+        updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
+      }
+    };
+
+    loadProfiles();
+  }, [updateSnackBarMessage]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
-
-  const Profile = ({ profile }: any) => {
-    return (
-      <>
-        <div className={classes.cardContainer}>
-          <img className={classes.profilePic} src={profile.photo}></img>
-          <Typography variant="h6">{profile.name}</Typography>
-          <Typography variant="subtitle2">{profile.blurb}</Typography>
-          <Typography variant="subtitle2">*****</Typography>
-          <Typography variant="subtitle2" className={classes.description}>
-            {profile.description}
-          </Typography>
-          <div className={classes.innerFlexRowProfileContainer}>
-            <Typography variant="subtitle2" className={classes.location}>
-              {profile.address}
-            </Typography>
-            <Typography variant="subtitle2">{profile.rate}</Typography>
-          </div>
-        </div>
-      </>
-    );
-  };
 
   const showMoreProfiles = () => {
     if (currentIndicesTopRow + 3 > profiles.length - 1) {
@@ -49,11 +41,11 @@ export default function Profiles() {
   console.log(profiles);
   return (
     <>
-      <div className={classes.flexContainer}>
+      <Box className={classes.flexContainer}>
         <Typography className={classes.header} variant="h5">
           Your Search Results
         </Typography>
-        <div className={classes.flexRowContainer}>
+        <Box className={classes.flexRowContainer}>
           <TextField
             id="location"
             fullWidth
@@ -62,10 +54,6 @@ export default function Profiles() {
             placeholder="Your location"
             autoComplete="location"
             autoFocus
-            // helperText={touched.email ? errors.email : ''}
-            // error={touched.email && Boolean(errors.email)}
-            // value={values.email}
-            // onChange={handleChange}
           />
           <TextField
             className={classes.date}
@@ -74,24 +62,20 @@ export default function Profiles() {
             margin="normal"
             type="date"
             autoComplete="current-dates"
-            // helperText={touched.dates ? errors.dates : ''}
-            // error={touched.dates && Boolean(errors.dates)}
-            // value={values.dates}
-            // onChange={handleChange}
           />
-        </div>
-        <div>
-          <div className={classes.innerFlexRowContainer}>
+        </Box>
+        <Box>
+          <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              return <Profile key={profile} profile={profile}></Profile>;
+              return <ProfileCard key={profile} profile={profile}></ProfileCard>;
             })}
-          </div>
-          <div className={classes.innerFlexRowContainer}>
+          </Box>
+          <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-              return <Profile key={profile} profile={profile}></Profile>;
+              return <ProfileCard key={profile} profile={profile}></ProfileCard>;
             })}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         <Button
           onClick={() => showMoreProfiles()}
@@ -103,7 +87,7 @@ export default function Profiles() {
         >
           Show More
         </Button>
-      </div>
+      </Box>
     </>
   );
 }

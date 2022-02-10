@@ -5,7 +5,7 @@ export async function getProfiles() {
     method: 'GET',
     credentials: 'include',
   };
-  return await fetch('/profile/profiles', fetchOptions)
+  return await fetch('/profile/sitters', fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
