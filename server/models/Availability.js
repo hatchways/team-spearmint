@@ -1,97 +1,52 @@
 const mongoose = require("mongoose");
 
+const dateOptions = {
+    startTime: {
+      type: Date, 
+      required: [
+        { validator: isDayActive, msg: 'A start time is required if this day is active!'},
+        { validator: isValidTime, msg: 'The start time cannot be after the end time'}
+      ]
+    }, 
+    endTime: {
+      type: Date,
+      required: [
+        { validator: isDayActive, msg: 'A end time is required if this day is active!'},
+        { validator: isValidTime, msg: 'The end time cannot be before the start time'}
+      ]
+    },
+    active: {
+      type: Boolean,
+      default: false, 
+    }
+}
+
+function isDayActive(){
+  return this.active === true
+}
+
+function isValidTime(){
+  return this.startTime > this.endTime
+}
+
 const availabilitySchema = new mongoose.Schema({
   profileId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Profile'
   },
-  schedule: {
-    'monday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'tuesday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'wednesday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'thursday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'friday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'saturday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }, 
-    'sunday' : {
-      startTime: {
-        type: Date
-      }, 
-      endTime: {
-        type: Date
-      },
-      active: {
-        type: Boolean,
-        default: false 
-      }
-    }
-  },
+  monday: dateOptions,
+  tuesday: dateOptions,
+  wednesday: dateOptions,
+  thursday: dateOptions,
+  friday: dateOptions,
+  saturday: dateOptions,
+  sunday: dateOptions,
 });
 
-module.exports = Availability = mongoose.model("availability", availabilitySchema);
+availabilitySchema.pre('save', function(next) {
+  let newTime = this.startTime
+  
+})
+
+module.exports = Availability = mongoose.model("Availability", availabilitySchema);
