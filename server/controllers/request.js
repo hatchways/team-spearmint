@@ -4,7 +4,6 @@ const Request = require("../models/Request");
 
 exports.createRequest = async (req, res) => {
     const { ownerId, sitterId, start, end, animalType, usefulInfo } = req.body;
-    console.log(new Date());
     try {
         const ownerExists = await User.findOne({ ownerId });
         if (!ownerExists) return res.status(404).json({ message: "Owner doesn't exist" });
@@ -13,11 +12,10 @@ exports.createRequest = async (req, res) => {
         if (!sitterExists) return res.status(404).json({ message: "Sitter doesn't exist" });
 
         const request = await Request.create(req.body);
-        if (!request) return res.status(404).json({ message: "unable to create a new request" });
 
         res.status(200).json(request);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -31,7 +29,6 @@ exports.getRequests = async (req, res) => {
 
         if(typeOfAccount === 'pet_sitter') {
             const requests = await Request.find({ sitterId: req.user.id }).lean();
-            if (!requests) return res.status(404).json({ message: "Something went wrong!!!" });
 
             const requestsWithOwnerInfo = await Promise.all(
                 requests.map(async (request) => {
@@ -45,7 +42,6 @@ exports.getRequests = async (req, res) => {
         }
         if(typeOfAccount === 'pet_owner') {
             const requests = await Request.find({ ownerId: req.user.id }).lean();
-            if (!requests) return res.status(404).json({ message: "Something went wrong!!!" });
 
             const requestsWithSitterInfo = await Promise.all(
                 requests.map(async (request) => {
@@ -59,12 +55,13 @@ exports.getRequests = async (req, res) => {
         }
             
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 exports.updateRequest = async (req, res) => {
-    const { requestId, newStatus } = req.body;
+    const { newStatus } = req.body;
+    const { requestId } = req.params;
 
     try {
         const userExists = await User.findOne({ _id: req.user.id });
@@ -73,11 +70,11 @@ exports.updateRequest = async (req, res) => {
         const theRequest = await Request.findOne({ _id: requestId });
         if(theRequest.sitterId.valueOf() !== req.user.id) return res.status(404).json({ message: "This sitter doesn't own this request" });
 
-        const requestUpdated = await Request.findOneAndUpdate({ _id: requestId }, { status: newStatus }, { new: true });
-        if (!requestUpdated) return res.status(404).json({ message: "Something went wrong!!!" });
+        theRequest.status = newStatus;
+        await theRequest.save();
 
-        res.status(200).json(requestUpdated);
+        res.status(200).json(theRequest);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

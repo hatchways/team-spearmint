@@ -5,6 +5,6 @@ const { createRequest, getRequests, updateRequest } = require("../controllers/re
 
 router.route("/").post(protect, createRequest);
 router.route("/").get(protect, getRequests);
-router.route("/").put(protect, updateRequest);
+router.route("/:requestId").put(protect, updateRequest);
 
 module.exports = router;
