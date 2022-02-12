@@ -1,39 +1,67 @@
-import clsx from 'clsx';
-import { Box, Grid, Typography, Avatar } from '@mui/material';
-import useStyles from './useStyles';
+import { useState } from 'react';
+import { Box, Grid, Typography, Avatar, Card, CardContent, Button, Modal } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { NavLink } from 'react-router-dom';
+import { makeStyles } from '@mui/styles';
+import MyModal from './MyModal';
+
+const useStyles = makeStyles(() => ({
+  status: {
+    textTransform: 'uppercase',
+    color: 'rgba(200, 200, 200, 0.9)',
+  },
+  settingButton: {
+    cursor: 'pointer',
+  },
+}));
 
 const RequestInfo: React.FC<{
   dummyData: any;
-  size?: string;
-}> = ({ dummyData, size }) => {
+  large?: boolean;
+}> = ({ dummyData, large }) => {
   const classes = useStyles();
+  const [open, setOpen] = useState<boolean>(false);
+  const handleOpen = (): void => {
+    setOpen(true);
+  };
+  const handleClose = (): void => setOpen(false);
 
   return (
-    <Box className={clsx(classes.requestInfo, size === 'large' && classes.requestInfoLarge)}>
-      <Grid xs={9} item>
-        <Typography variant={size === 'large' ? 'h6' : 'body1'} gutterBottom>
-          {dummyData.date}
-        </Typography>
-        <Box className={classes.nameAvatar}>
-          <Avatar
-            alt="Profile Image"
-            src={dummyData.avatar}
-            sx={size === 'large' ? { width: 50, height: 50 } : { width: 40, height: 40 }}
-          />
-          <Typography variant={size === 'large' ? 'h6' : 'body1'}>{dummyData.name}</Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} item className={classes.statusAndIcon}>
-        <Typography variant="caption" className={classes.status}>
-          {size === 'large' ? '' : dummyData.status}
-        </Typography>
-        <NavLink to="" className={clsx(classes.settingsIcon, size === 'large' && classes.settingsIconLarge)}>
-          <SettingsIcon color="disabled" fontSize="small" />
-        </NavLink>
-      </Grid>
-    </Box>
+    <Card
+      sx={
+        large
+          ? { border: 'none', boxShadow: 'none' }
+          : { border: '1px solid rgba(227, 227, 227, 0.9)', boxShadow: 'none' }
+      }
+    >
+      <CardContent>
+        <Grid container sx={{ display: 'flex' }}>
+          <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography variant={large ? 'h6' : 'body1'}>{dummyData.date}</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar
+                alt="Profile Image"
+                src={dummyData.avatar}
+                sx={large ? { width: 50, height: 50 } : { width: 40, height: 40 }}
+              />
+              <Typography variant={large ? 'h6' : 'body1'}>{dummyData.name}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Typography variant="caption" className={classes.status}>
+              {large ? null : dummyData.status}
+            </Typography>
+          </Grid>
+          <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'right' }}>
+            <Box onClick={handleOpen} sx={large ? { cursor: 'pointer', marginTop: -2 } : { cursor: 'pointer' }}>
+              <SettingsIcon color="disabled" fontSize="small" />
+            </Box>
+            <Modal disableAutoFocus={true} open={open} onClose={handleClose}>
+              <MyModal dummyData={dummyData} open={open} handleClose={handleClose} />
+            </Modal>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };
 

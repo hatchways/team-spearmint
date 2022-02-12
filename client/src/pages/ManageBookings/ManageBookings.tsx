@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import { Box, Grid, Typography, Paper, Card } from '@mui/material';
 import useStyles from './useStyles';
-import dogPicture from '../../images/landing/hero.jpg';
 import RequestInfo from '../../components/RequestInfo/RequestInfo';
 import MyCalendar from '../../components/MyCalendar/MyCalendar';
 
@@ -10,23 +9,17 @@ const dummyData = [
   {
     requestId: '111',
     date: '5 April 2020, 10-12 AM',
-    avatar: 'https://groomersgallery.com/wp-content/uploads/2017/10/top-profile-example-1.jpg',
+    avatar:
+      'https://media.istockphoto.com/photos/enjoying-being-a-dog-owner-picture-id1202541194?b=1&k=20&m=1202541194&s=170667a&w=0&h=arj673-gVbb0q8BBdEo3enTNKcJDpHSXFyQdKSRYMLU=',
     name: 'Norma Byers',
-    status: 'Accepted',
+    status: 'accepted',
   },
   {
     requestId: '222',
-    date: '5 April 2020, 10-12 AM',
-    avatar: 'https://groomersgallery.com/wp-content/uploads/2017/10/top-profile-example-1.jpg',
-    name: 'Norma Byers',
-    status: 'Accepted',
-  },
-  {
-    requestId: '333',
-    date: '5 April 2020, 10-12 AM',
-    avatar: 'https://groomersgallery.com/wp-content/uploads/2017/10/top-profile-example-1.jpg',
-    name: 'Norma Byers',
-    status: 'Accepted',
+    date: '8 April 2020, 7-9 AM',
+    avatar: 'https://st.depositphotos.com/1146092/3435/i/600/depositphotos_34357621-stock-photo-dog-woner-with-dog.jpg',
+    name: 'Charles Compton',
+    status: 'pending',
   },
 ];
 
@@ -44,7 +37,7 @@ export default function ManageBookings(): JSX.Element {
                 <Typography className={classes.title} variant="caption" gutterBottom>
                   Your Next booking:
                 </Typography>
-                <RequestInfo key="123" dummyData={dummyData[0]} size="large" />
+                <RequestInfo dummyData={dummyData[0]} large={true} />
               </Box>
             </Paper>
             <Paper className={classes.cardWrapper}>

@@ -25,6 +25,16 @@
   font-weight: 400;
   letter-spacing: -0.3px;
 }
+.react-calendar__navigation__next2-button,
+.react-calendar__navigation__prev2-button {
+  display: none;
+}
+.react-calendar__navigation__next-button,
+.react-calendar__navigation__prev-button {
+  color: #c4c4c4 !important;
+  font-weight: 500 !important;
+  font-size: 30px !important;
+}
 .react-calendar__month-view__weekdays__weekday {
   display: none;
 }
@@ -44,6 +54,7 @@
   line-height: 30px;
   font-weight: 600;
 }
+
 .react-calendar__tile--hasActive {
   background: #f14140;
   border-radius: 50%;
@@ -56,3 +67,4 @@
   font-weight: bold;
   color: white;
 }
+
