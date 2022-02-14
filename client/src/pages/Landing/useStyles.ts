@@ -1,4 +1,3 @@
-import { Repeat } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
 import landingPicture from '../../images/landing/landing_page.jpeg';
 
@@ -13,6 +12,7 @@ const useStyles = makeStyles(() => ({
     backgroundPosition: 'center',
     backgroundRepeat: 'no-Repeat',
     backgroundSize: 'cover',
+    minHeight: '45vh',
   },
   form: {
     display: 'flex',

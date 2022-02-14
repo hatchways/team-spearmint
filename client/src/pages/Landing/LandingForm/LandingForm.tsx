@@ -1,12 +1,9 @@
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Formik, FormikHelpers } from 'formik';
+import { Box, Button, Grid, CircularProgress, InputLabel } from '@mui/material';
+import { Formik, FormikHelpers, Form } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
-import FormInputRight from '../../../components/FormInput/FormInputRight';
-import FormInputLeft from '../../../components/FormInput/FormInputLeft';
+import { DatePickerField } from '../../../components/FormInput/DatePicker/DatePickerField';
 
 interface Props {
   handleSubmit: (
@@ -16,39 +13,37 @@ interface Props {
       end,
     }: {
       location: string;
-      start: string;
-      end: string;
+      start: Date;
+      end: Date;
     },
     {
       setStatus,
       setSubmitting,
     }: FormikHelpers<{
       location: string;
-      start: string;
-      end: string;
+      start: Date;
+      end: Date;
     }>,
   ) => void;
 }
 
 export default function LandingForm({ handleSubmit }: Props): JSX.Element {
   const classes = useStyles();
+  const initialValues: any = {
+    location: '',
+    start: '',
+    end: '',
+  };
+  const validationSchema: any = Yup.object({
+    location: Yup.string().required('Required'),
+    start: Yup.date().required('Required'),
+    end: Yup.date().required('Required'),
+  });
 
   return (
-    <Formik
-      initialValues={{
-        location: '',
-        start: '',
-        end: '',
-      }}
-      validationSchema={Yup.object().shape({
-        location: Yup.string().required('Location is required'),
-        start: Yup.string().required('Drop In  is required'),
-        end: Yup.string().required('Drop Off  is required'),
-      })}
-      onSubmit={handleSubmit}
-    >
+    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <Form onSubmit={handleSubmit} className={classes.form} noValidate>
           <FormInput
             id="location"
             label="Where"
@@ -56,42 +51,33 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
             margin="normal"
             name="location"
             placeholder="Anywhere"
-            autoFocus
             helperText={touched.location ? errors.location : ''}
             error={touched.location && Boolean(errors.location)}
             value={values.location}
             onChange={handleChange}
           />
-          <Box style={{ display: 'flex' }}>
-            <FormInputLeft
-              id="start"
-              label="Drop in / Drop off"
-              fullWidth
-              margin="normal"
-              type="text"
-              name="start"
-              placeholder="mm/dd/yyy"
-              helperText={touched.start ? errors.start : ''}
-              error={touched.start && Boolean(errors.start)}
-              value={values.start}
-              onChange={handleChange}
-            />
-            <FormInputRight
-              id="end"
-              label=""
-              fullWidth
-              margin="normal"
-              type="text"
-              name="end"
-              placeholder="mm/dd/yyy"
-              helperText={touched.end ? errors.end : ''}
-              error={touched.end && Boolean(errors.end)}
-              value={values.end}
-              onChange={handleChange}
-            />
-          </Box>
+          <InputLabel
+            sx={{
+              fontSize: 16,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              color: '#000',
+            }}
+            shrink
+            htmlFor="dates"
+          >
+            Drop In/ Drop off
+          </InputLabel>
+          <Grid container>
+            <Grid item xs={6}>
+              <DatePickerField id="dates" name="start" />
+            </Grid>
+            <Grid item xs={6}>
+              <DatePickerField id="dates" name="end" />
+            </Grid>
+          </Grid>
 
-          <Box marginTop={5}>
+          <Box mt={4} mb={4} sx={{ paddingLeft: '0px, 0px, 20px 0px' }}>
             <Button
               type="submit"
               size="large"
@@ -103,7 +89,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Find my dog sitter'}
             </Button>
           </Box>
-        </form>
+        </Form>
       )}
     </Formik>
   );
