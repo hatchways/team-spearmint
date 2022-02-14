@@ -116,11 +116,11 @@ const Navbar: React.FC = () => {
     handleClose();
     logout();
   };
-  const [profile, setProfile] = useState<Profile>({ accountType: 'initial' });
+  const [profile, setProfile] = useState<Profile>();
 
   const renderMenuItems = () => {
     return menuItems.map((menu) => {
-      if (menu.authenticated && menu.canView?.includes(profile?.accountType)) {
+      if (menu.authenticated) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
         if (!menu.authenticated) {
