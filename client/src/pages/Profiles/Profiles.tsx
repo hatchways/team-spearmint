@@ -23,7 +23,7 @@ export default function Profiles() {
       }
     };
 
-    loadProfiles();
+    loadProfiles().catch((error) => updateSnackBarMessage(error));
   }, [updateSnackBarMessage]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
@@ -38,7 +38,7 @@ export default function Profiles() {
       setCurrentIndicesBottomRow(currentIndicesBottomRow + 6);
     }
   };
-  console.log(profiles);
+
   return (
     <>
       <Box className={classes.flexContainer}>

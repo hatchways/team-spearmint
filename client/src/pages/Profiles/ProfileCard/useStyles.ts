@@ -1,11 +1,14 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
+  card: {
+    marginRight: 40,
+  },
   cardContainer: {
     height: 275,
     width: 225,
-    boxShadow: '1px 1px 5px lightgrey, -1px -1px 5px lightgrey',
-    marginRight: 40,
+    // boxShadow: '1px 1px 5px lightgrey, -1px -1px 5px lightgrey',
+    // marginRight: 40,
     textAlign: 'center',
     position: 'relative',
   },
