@@ -13,6 +13,6 @@ router.route('/availability').post(createSchedule);
 router.route('/availability/active').get(getActiveSchedule)
 router.route('/availability/:scheduleId').get(getSchedule)
 router.route('/availability').get(getAllSchedules)
-router.route('/availability/:scheduleId/activate').put(makeActiveSchedule)
+router.route('/availability/:scheduleId/activate').patch(makeActiveSchedule)
 
 module.exports = router;

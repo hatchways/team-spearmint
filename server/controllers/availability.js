@@ -13,14 +13,14 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
       schedule: schedule.schedule
     })
 
-    newSchedule.save((error, schedule) => {
-      if(error){
-        res.status(500)
-        throw new Error(error)
-      } else {
-        res.status(201).send(schedule)
-      }
-    })
+    let savedSchedule = await newSchedule.save()
+
+    if(!savedSchedule){
+      res.status(500)
+      throw new Error("Schedule could not be created!")
+    } else {
+      res.status(201).send(savedSchedule)
+    }
   });
 
   // @route GET /availability/:scheduleId
@@ -42,21 +42,9 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   // @access public
 
   exports.getActiveSchedule = asyncHandler(async (req, res, next) => {
-    const schedules = await Availability.find({ profile: req.query.profileId })
-
-    if (!schedules){
-      res.status(404)
-      throw new Error("There are no schedules!")
-    } else {
-      const activeSchedule = schedules.filter((schedule) => schedule.active )
-
-      if(!activeSchedule){
-        res.status(404)
-        throw new Error("There is no active schedule!")
-      } else {
-        res.status(200).send(activeSchedule)
-      }
-    }
+    const activeSchedule = await Availability.find({ profile: req.query.profileId, active: true })
+   
+    res.status(200).send(activeSchedule)
   })
 
   //@route GET /availability
@@ -65,16 +53,10 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
 
   exports.getAllSchedules = asyncHandler(async (req, res, next) => {
     const allSchedules = await Availability.find({ profileId: req.query.profileId})
-
-    if (!allSchedules){
-      res.status(404)
-      throw new Error("Not able to load schedules")
-    } else {  
-      res.status(200).send(allSchedules)
-    }
+    res.status(200).send(allSchedules)
   })
 
-  //@route PUT /availability/:scheduleId/activate
+  //@route PATCH /availability/:scheduleId/activate
   //@desc set a schedule as active for a given profile
   //@access private
 
@@ -87,14 +69,20 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     }
     const makeActiveSchedule = await Availability.findById(req.params.scheduleId)
 
-    makeActiveSchedule.active = true 
-    makeActiveSchedule.save((error, schedule) => {
-      if(error){
+    if(!makeActiveSchedule){
+      res.status(404)
+      throw new Error("Could not find an active schedule")
+    } else {
+      makeActiveSchedule.active = true 
+
+      const savedSchedule = makeActiveSchedule.save()
+  
+      if(!savedSchedule){
         res.status(500)
-        throw new Error(error)
+        throw new Error("Schedule was not updated to active")
       } else {
         res.status(200).send(schedule)
       }
-    })
+    }
   })
 
