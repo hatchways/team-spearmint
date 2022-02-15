@@ -15,20 +15,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     gap: 20,
   },
-  rightWrapper: {
+  cardWrapper: {
     width: '100%',
-  },
-  contentWrapper: {
-    margin: '0 auto',
-    padding: 10,
+    maxHeight: 500,
+    paddingLeft: 30,
+    paddingRight: 10,
+    paddingBottom: 15,
     backgroundColor: '#fff',
-    borderRadius: 2,
+    borderRadius: 1,
     boxShadow:
       '0px 0px 1.9px rgba(0, 0, 0, 0.007),0px 0px 4.9px rgba(0, 0, 0, 0.014),0px 0px 9.9px rgba(0, 0, 0, 0.021),0px 0px 20.4px rgba(0, 0, 0, 0.031),0px 0px 56px rgba(0, 0, 0, 0.05)',
   },
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
+  rightWrapper: {
+    width: '100%',
   },
   title: {
     letterSpacing: 1.1,

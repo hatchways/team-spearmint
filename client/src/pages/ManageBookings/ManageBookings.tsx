@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import { Box, Grid, Typography, Avatar, CircularProgress } from '@mui/material';
+import { Box, Grid, Typography, Paper, CircularProgress } from '@mui/material';
 import useStyles from './useStyles';
-import CardWrapper from '../../components/CardWrapper/CardWrapper';
-import getSitterRequests from '../../helpers/APICalls/sitterRequests';
-import changeStatus from '../../helpers/APICalls/changeStatus';
-import { useAuth } from '../../context/useAuthContext';
+import RequestInfo from '../../components/RequestInfo/RequestInfo';
 import MyCalendar from '../../components/MyCalendar/MyCalendar';
-import { format } from 'date-fns';
-import RequestInfo from './RequestInfo/RequestInfo';
+import { useAuth } from '../../context/useAuthContext';
+import getSitterRequests from '../../helpers/APICalls/sitterRequests';
 import { RequestApiData } from '../../interface/RequestApiData';
+import { format } from 'date-fns';
+import changeStatus from '../../helpers/APICalls/changeStatus';
 
 export default function ManageBookings(): JSX.Element {
   const classes = useStyles();
@@ -18,22 +17,16 @@ export default function ManageBookings(): JSX.Element {
   const { loggedInUser } = useAuth();
   const { sitterRequests } = useAuth();
   const { updateSitterRequestsContext } = useAuth();
+  const [dateValue, setDateValue] = useState<Date>(new Date(new Date().getFullYear(), new Date().getMonth(), 20));
 
-  const handleStatus = (
-    accepted: boolean,
-    declined: boolean,
-    requestId: string,
-    sitterId: string,
-    avatar?: string | undefined,
-  ): void => {
-    changeStatus(accepted, declined, requestId, sitterId, avatar).then((res) => {
+  const handleStatus = (requestId: string, newStatus: string): void => {
+    changeStatus(requestId, newStatus).then((res) => {
       const index = sitterRequests.findIndex((request: RequestApiData) => {
         return request._id === requestId;
       });
       if (index !== -1) {
         const newSitterRequests = [...sitterRequests];
         newSitterRequests[index] = res;
-        console.log(res);
         updateSitterRequestsContext(newSitterRequests);
       }
     });
@@ -90,36 +83,15 @@ export default function ManageBookings(): JSX.Element {
       <Grid sx={{ width: '87%', margin: '0 auto' }} spacing={2} container>
         <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }} className={classes.leftContainer}>
           <Box className={classes.leftWrapper}>
-            <CardWrapper>
+            <Paper className={classes.cardWrapper}>
               <Box className={classes.bookingContent}>
                 <Typography className={classes.title} variant="caption" gutterBottom>
                   Your Next booking:
                 </Typography>
-                {nextRequest && (
-                  <RequestInfo
-                    key={nextRequest._id}
-                    requestId={nextRequest._id}
-                    sitterId={nextRequest.sitterId}
-                    date={`${nextRequest.start}-${nextRequest.end}`}
-                    start={nextRequest.start}
-                    avatar={nextRequest.ownerPhoto}
-                    name={nextRequest.ownerName}
-                    status={
-                      nextRequest.accepted === false
-                        ? nextRequest.declined === false
-                          ? 'pending'
-                          : 'declined'
-                        : 'accepted'
-                    }
-                    accepted={nextRequest.accepted}
-                    declined={nextRequest.declined}
-                    size="large"
-                    handleStatus={handleStatus}
-                  />
-                )}
+                {nextRequest && <RequestInfo data={nextRequest} large={true} handleStatus={handleStatus} />}
               </Box>
-            </CardWrapper>
-            <CardWrapper>
+            </Paper>
+            <Paper className={classes.cardWrapper}>
               <Box className={classes.bookingContent}>
                 <Typography className={classes.title} variant="caption" gutterBottom>
                   Current bookings:
@@ -128,26 +100,8 @@ export default function ManageBookings(): JSX.Element {
               <Box className={classes.scrollArea}>
                 <Box className={classes.requests}>
                   {currentRequests &&
-                    currentRequests.map((request: any) => (
-                      <RequestInfo
-                        key={request._id}
-                        requestId={request._id}
-                        sitterId={request.sitterId}
-                        date={`${request.start}-${request.end}`}
-                        start={request.start}
-                        avatar={request.ownerPhoto}
-                        name={request.ownerName}
-                        status={
-                          request.accepted === false
-                            ? request.declined === false
-                              ? 'pending'
-                              : 'declined'
-                            : 'accepted'
-                        }
-                        accepted={request.accepted}
-                        declined={request.declined}
-                        handleStatus={handleStatus}
-                      />
+                    currentRequests.map((request: RequestApiData) => (
+                      <RequestInfo key={request._id} data={request} handleStatus={handleStatus} />
                     ))}
                 </Box>
 
@@ -158,39 +112,21 @@ export default function ManageBookings(): JSX.Element {
                 </Box>
                 <Box className={classes.requests}>
                   {pastRequests &&
-                    pastRequests.map((request: any) => (
-                      <RequestInfo
-                        key={request._id}
-                        requestId={request._id}
-                        sitterId={request.sitterId}
-                        date={`${request.start}-${request.end}`}
-                        start={request.start}
-                        avatar={request.ownerPhoto}
-                        name={request.ownerName}
-                        status={
-                          request.accepted === false
-                            ? request.declined === false
-                              ? 'pending'
-                              : 'declined'
-                            : 'accepted'
-                        }
-                        accepted={request.accepted}
-                        declined={request.declined}
-                        handleStatus={handleStatus}
-                      />
+                    pastRequests.map((request: RequestApiData) => (
+                      <RequestInfo key={request._id} data={request} handleStatus={handleStatus} />
                     ))}
                 </Box>
               </Box>
-            </CardWrapper>
+            </Paper>
           </Box>
         </Grid>
         <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }} className={classes.rightContainer}>
           <Box className={classes.rightWrapper}>
-            <CardWrapper>
+            <Paper className={classes.cardWrapper}>
               <Box className={classes.calendarContainer}>
                 <MyCalendar />
               </Box>
-            </CardWrapper>
+            </Paper>
           </Box>
         </Grid>
       </Grid>

@@ -1,56 +1,38 @@
 import { Box, Grid, Typography, Avatar } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import useStyles from './useStyles';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import useStyles from './useStyles';
 
 const MyModal: React.FC<{
-  requestId: string;
-  sitterId: string;
-  date: string;
-  avatar?: string | undefined;
-  name: string;
-  status: string;
-  accepted: boolean;
-  declined: boolean;
-  handleStatus: (
-    accepted: boolean,
-    declined: boolean,
-    requestId: string,
-    sitterId: string,
-    avatar?: string | undefined,
-  ) => void;
+  data: any;
   open: boolean;
+  handleStatus: (requestId: string, newStatus: string) => void;
   handleClose: () => void;
-}> = ({ requestId, sitterId, date, avatar, name, status, accepted, declined, handleStatus, open, handleClose }) => {
+}> = ({ data, open, handleClose, handleStatus }) => {
   const classes = useStyles();
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={open} onClose={handleClose} disableAutoFocus={true}>
       <Box className={classes.modalBox}>
         <Typography id="modal-modal-title" variant="h6" component="h2"></Typography>
         <Grid container alignItems="center">
           <Grid xs={8} item>
             <Typography variant="body1" gutterBottom>
-              {date}
+              {`${data.start}-${data.end}`}
             </Typography>
             <Box className={classes.nameAvatar}>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Avatar alt="Profile Image" src={avatar} sx={{ width: 40, height: 40 }} />
+                <Avatar alt="Profile Image" src={data.ownerPhoto} sx={{ width: 40, height: 40 }} />
               </Typography>
-              <Typography variant="body1">{name}</Typography>
+              <Typography variant="body1">{data.ownerName}</Typography>
             </Box>
           </Grid>
-          {status === 'pending' && (
+          {data.status === 'pending' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box
                 onClick={() => {
-                  handleStatus(!accepted, declined, requestId, sitterId, avatar);
+                  handleStatus(data._id, 'accepted');
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -60,7 +42,7 @@ const MyModal: React.FC<{
               </Box>
               <Box
                 onClick={() => {
-                  handleStatus(accepted, !declined, requestId, sitterId, avatar);
+                  handleStatus(data._id, 'declined');
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -70,11 +52,11 @@ const MyModal: React.FC<{
               </Box>
             </Grid>
           )}
-          {status === 'accepted' && (
+          {data.status === 'accepted' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box
                 onClick={() => {
-                  handleStatus(!accepted, !declined, requestId, sitterId, avatar);
+                  handleStatus(data._id, 'declined');
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -84,7 +66,7 @@ const MyModal: React.FC<{
               </Box>
             </Grid>
           )}
-          {status === 'declined' && (
+          {data.status === 'declined' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box className={classes.statusWrapper}>
                 <Typography style={{ color: '#f14140', fontSize: '11px' }}>

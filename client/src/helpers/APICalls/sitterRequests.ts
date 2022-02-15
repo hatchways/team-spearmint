@@ -6,7 +6,7 @@ const getSitterRequests = async (id: string): Promise<RequestApiData> => {
     method: 'GET',
     credentials: 'include',
   };
-  return await fetch(`/request/sitter/${id}`, fetchOptions)
+  return await fetch(`/requests`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
