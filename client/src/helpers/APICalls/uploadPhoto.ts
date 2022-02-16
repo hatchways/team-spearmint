@@ -8,7 +8,7 @@ const uploadPhoto = async (data: FormData, user: User | undefined): Promise<Auth
     body: data,
     credentials: 'include',
   };
-  return await fetch(`/uploadImage/${user?.id}`, fetchOptions)
+  return await fetch(`/upload-image/${user?.id}`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
