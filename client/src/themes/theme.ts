@@ -5,9 +5,12 @@ export const theme = createTheme({
     primary: {
       main: '#f14140',
     },
+    secondary: {
+      main: '#fff',
+    },
   },
   typography: {
-    fontFamily: '"Poppins", "Roboto", "sans-serif"',
+    fontFamily: '"Poppins", "sans-serif"',
     fontSize: 12,
     button: {
       fontWeight: 700,
