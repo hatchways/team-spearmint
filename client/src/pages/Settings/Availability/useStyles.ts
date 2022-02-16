@@ -6,18 +6,42 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: '20px !important',
   },
   dayText: {
-    marginRight: 20,
+    marginRight: 80,
     width: 20,
   },
   container: {
-    // backgroundColor: 'red',
+    marginBottom: 20,
   },
   timeContainer: {
     marginBottom: 20,
-    marginLeft: 35,
+    // marginRight: '20%',
+    width: '100%',
+    // backgroundColor: 'red',
   },
   saveButton: {
     backgroundColor: 'red',
+  },
+  select: {
+    width: '100%',
+    marginRight: 20,
+  },
+  addSchedule: {
+    height: 55,
+    width: '30%',
+  },
+  scheduleNameInput: {
+    width: '80%',
+    // marginLeft: '20%',
+  },
+  form: {
+    // marginLeft: '20%',
+  },
+  startTime: {
+    marginRight: 10,
+    width: '150px',
+  },
+  endTime: {
+    width: '150px',
   },
 }));
 
