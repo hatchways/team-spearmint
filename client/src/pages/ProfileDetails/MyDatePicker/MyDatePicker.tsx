@@ -41,6 +41,7 @@ export const MyDatePicker: React.FC<MyDatePickerProps> = ({ name, id, label }) =
             fixedHeight
             dateFormat="d MMMM yyyy"
             popperPlacement="top-end"
+            minDate={new Date()}
             {...field}
             id={id}
             name={name}
