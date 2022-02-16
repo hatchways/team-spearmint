@@ -18,7 +18,7 @@ export const DatePickerField: React.FC<DatePickerProps> = ({ name, id }) => {
       fixedHeight
       showTimeSelect
       timeInputLabel="Time:"
-      dateFormat="MM/dd/yyyy h:mm aa"
+      dateFormat="MM/dd/yyyy h:mmaaa"
       {...field}
       placeholderText="mm/dd/yyyy"
       popperPlacement="top-end"

@@ -73,7 +73,7 @@ export default function LandingForm({ handleSubmit }: Props): JSX.Element {
               <DatePickerField id="dates" name="start" />
             </Grid>
             <Grid item xs={6}>
-              <DatePickerField id="dates" name="end" />
+              <DatePickerField id="end-dates" name="end" />
             </Grid>
           </Grid>
 
