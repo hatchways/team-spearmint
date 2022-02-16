@@ -62,32 +62,35 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @desc Login user
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
-    const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+  const { email, password } = req.body;
 
-    if (user && (await user.matchPassword(password))) {
-        const token = generateToken(user._id);
-        const secondsInWeek = 604800;
+  const user = await User.findOne({ email });
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            maxAge: secondsInWeek * 1000,
-        });
+  if (user && (await user.matchPassword(password))) {
+    const token = generateToken(user._id);
+    const secondsInWeek = 604800;
+    const profile = await Profile.findOne(user._id);
 
-        res.status(200).json({
-            success: {
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    email: user.email,
-                },
-            },
-        });
-    } else {
-        res.status(401);
-        throw new Error("Invalid email or password");
-    }
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: secondsInWeek * 1000
+    });
+
+    res.status(200).json({
+      success: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email
+        },
+        profile: profile,
+      }
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
 });
 
 // @route GET /auth/user
