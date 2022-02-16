@@ -1,0 +1,30 @@
+.left input {
+    border-radius: 8px 0px 0px 8px;
+    border: 1px solid #dbdbdb;
+    font-size: 12px;
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
+    padding-left: 20px;
+  }
+  
+  .right input {
+    border-radius: 0px 8px 8px 0px;
+    border: 1px solid #dbdbdb;
+    border-left: none;
+    font-size: 12px;
+    width: 100%;
+    padding: 15px;
+    font-weight: bold;
+  }
+  .react-datepicker__day--keyboard-selected, .react-datepicker__month-text--keyboard-selected, .react-datepicker__quarter-text--keyboard-selected, .react-datepicker__year-text--keyboard-selected {
+    border-radius: 50%;
+    background-color: #f14140;
+    color: #fff;
+  }
+  
+  .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range, .react-datepicker__month-text--selected, .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range, .react-datepicker__year-text--in-range {
+    border-radius: 50%;
+    background-color: #f14140;
+    color: #fff;
+  }
