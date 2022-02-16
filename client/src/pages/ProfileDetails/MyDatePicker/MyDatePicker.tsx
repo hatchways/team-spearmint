@@ -1,10 +1,11 @@
 import React from 'react';
 import { Box, InputLabel, CircularProgress, Button, Grid } from '@mui/material';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormikContext, Field } from 'formik';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './myDatePicker.css';
 import format from 'date-fns/format';
+import { urlToHttpOptions } from 'url';
 
 interface MyDatePickerProps {
   name: string;
@@ -59,7 +60,7 @@ export const MyDatePicker: React.FC<MyDatePickerProps> = ({ name, id, label }) =
             timeIntervals={60}
             timeCaption="Time"
             dateFormat="h:mm aa"
-            popperPlacement="top"
+            popperPlacement="top-end"
             {...field}
             id={id}
             name={name}
