@@ -85,11 +85,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ header, currentUser, currentP
         initialValues={{
           name: currentUser?.name || '',
           email: currentUser?.email || '',
-          gender: currentProfile.gender || 'none',
-          birthday: currentProfile.birthday || new Date(),
-          telephone: currentProfile.telephone || '',
-          address: currentProfile.address || '',
-          description: currentProfile.description || '',
+          gender: currentProfile?.gender || 'none',
+          birthday: currentProfile?.birthday || new Date(),
+          telephone: currentProfile?.telephone || '',
+          address: currentProfile?.address || '',
+          description: currentProfile?.description || '',
         }}
         onSubmit={handleSubmit}
       >
