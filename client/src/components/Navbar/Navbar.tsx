@@ -19,12 +19,18 @@ import lovingSitterLogo from '../../images/logo.svg';
 import { useStyles } from './useStyles';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
+import loadProfile from '../../helpers/APICalls/loadProfile';
+import { Profile } from '../../interface/Profile';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { updateSnackBarMessage } = useSnackBar();
+
   const { loggedInUser, logout } = useAuth();
+
   const open = Boolean(anchorEl);
 
   const NavbarButton = styled(Button)({
@@ -119,17 +125,35 @@ const Navbar: React.FC = () => {
     handleClose();
     logout();
   };
+  const [profile, setProfile] = useState<Profile>({ accountType: 'initial' });
 
   const renderMenuItems = () => {
-    // TODO: conditionally render based on profile type
     return menuItems.map((menu) => {
-      if (menu.authenticated) {
+      if (menu.authenticated && menu.canView?.includes(profile?.accountType)) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
-        return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        if (!menu.authenticated) {
+          return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        }
       }
     });
   };
+
+  useEffect(() => {
+    if (loggedInUser) {
+      async function getProfile() {
+        const loadedProfile = await loadProfile(loggedInUser?.id);
+
+        if (!loadedProfile) {
+          updateSnackBarMessage('Profile not found');
+        } else {
+          setProfile(loadedProfile);
+        }
+      }
+
+      getProfile();
+    }
+  }, [loggedInUser, updateSnackBarMessage]);
 
   return (
     <Grid
@@ -145,7 +169,7 @@ const Navbar: React.FC = () => {
       </Grid>
       <Grid xs={8} md={6} item>
         <Grid container alignItems="center" gap={2} justifyContent="flex-end">
-          {renderMenuItems()}
+          {profile && renderMenuItems()}
           {loggedInUser && (
             <Grid xs={2} item>
               <>
