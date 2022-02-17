@@ -83,7 +83,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
           name: user.name,
           email: user.email
         },
-        profile: profile,
+        profile
       }
     });
   } else {
