@@ -16,7 +16,7 @@ const requestSchema = new mongoose.Schema(
             type: Date,
             required: true,
             default: Date.now,
-            min: [new Date(), "Staring date should be greater or equal than today"],
+            min: [new Date(), "Starting date should be greater or equal than today"],
         },
         end: {
             type: Date,
