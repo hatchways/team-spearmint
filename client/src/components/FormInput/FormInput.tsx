@@ -16,7 +16,6 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
 
 interface FormInputProps {
   label: string;
-
   defaultValue?: any;
   id: string;
   select?: boolean;
