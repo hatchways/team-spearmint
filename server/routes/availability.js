@@ -9,10 +9,10 @@ const {
  makeActiveSchedule
 } = require('../controllers/availability');
 
-router.route('/availability').post(createSchedule);
-router.route('/availability/active').get(getActiveSchedule)
-router.route('/availability/:scheduleId').get(getSchedule)
-router.route('/availability').get(getAllSchedules)
-router.route('/availability/:scheduleId/activate').patch(makeActiveSchedule)
+router.route('/').post(createSchedule);
+router.route('/active').get(getActiveSchedule)
+router.route('/:scheduleId').get(getSchedule)
+router.route('/all').get(getAllSchedules)
+router.route('/:scheduleId/activate').patch(makeActiveSchedule)
 
 module.exports = router;

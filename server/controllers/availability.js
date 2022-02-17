@@ -6,20 +6,26 @@ const mongoose = require("mongoose");
 // @desc create a schedule
 // @access private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
-    const schedule = req.body.schedule
-   
-    let newSchedule = new Availability({
-      profileId: schedule.profileId,
-      schedule: schedule.schedule
-    })
+    const { schedule } = req.body.schedule
+    const profile = await Profile.findOne({userId: req.user.id});
 
-    let savedSchedule = await newSchedule.save()
-
-    if(!savedSchedule){
-      res.status(500)
-      throw new Error("Schedule could not be created!")
+    if(!profile){
+      res.status(404)
+      throw new Error("There is no profile associated with this user!")
     } else {
-      res.status(201).send(savedSchedule)
+      const newSchedule = new Availability({
+        profileId: profile._id,
+        schedule: schedule
+      })
+  
+      const savedSchedule = await newSchedule.save()
+  
+      if(!savedSchedule){
+        res.status(500)
+        throw new Error("Schedule could not be created!")
+      } else {
+        res.status(201).send(savedSchedule)
+      }
     }
   });
 
@@ -28,13 +34,20 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   // @access public
   exports.getSchedule = asyncHandler(async (req, res, next) => {
     const schedule = await Availability.findOne({ _id: req.params.scheduleId})
+    const profile = await Profile.findOne({userId: req.user.id});
 
-    if(!schedule){
-      res.status(404)
-      throw new Error("There is no schedule found!")
+    if(schedule.profileId === profile._id) {
+      if(!schedule){
+        res.status(404)
+        throw new Error("There is no schedule found!")
+      } else {
+        res.status(200).send(schedule)
+      }
     } else {
-      res.status(200).send(schedule)
+      res.status(401)
+      throw new Error("You are unauthorized to take this action!")
     }
+    
   })
 
   // @route GET /availability/active
@@ -42,9 +55,16 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   // @access public
 
   exports.getActiveSchedule = asyncHandler(async (req, res, next) => {
-    const activeSchedule = await Availability.find({ profile: req.query.profileId, active: true })
+    const profile = await Profile.findOne({userId: req.user.id});
+
+    if(!profile){
+      res.status(404)
+      throw new Error("Profile not found!")
+    } else {
+      const activeSchedule = await Availability.find({ profile: profile._id, active: true })
    
-    res.status(200).send(activeSchedule)
+      res.status(200).send(activeSchedule)
+    }
   })
 
   //@route GET /availability
@@ -52,8 +72,15 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   //@access public 
 
   exports.getAllSchedules = asyncHandler(async (req, res, next) => {
-    const allSchedules = await Availability.find({ profileId: req.query.profileId})
-    res.status(200).send(allSchedules)
+    const profile = await Profile.findOne({userId: req.user.id});
+
+    if(!profile){
+      res.status(404)
+      throw new Error("Profile not found!")
+    } else {
+      const allSchedules = await Availability.find({ profileId: profile._id})
+      res.status(200).send(allSchedules)
+    }
   })
 
   //@route PATCH /availability/:scheduleId/activate
@@ -61,28 +88,37 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   //@access private
 
   exports.makeActiveSchedule = asyncHandler(async (req, res, next) => {
-    const activeSchedule = await Availability.find({ profileId: req.query.profileId, active: true })
+    const profile = await Profile.findOne({userId: req.user.id});
 
-    if(activeSchedule.length !== 0){
-      activeSchedule[0].active = false 
-      activeSchedule[0].save()
-    }
-    const makeActiveSchedule = await Availability.findById(req.params.scheduleId)
-
-    if(!makeActiveSchedule){
+    if(!profile){
       res.status(404)
-      throw new Error("Could not find an active schedule")
+      throw new Error("Profile not found!")
     } else {
-      makeActiveSchedule.active = true 
+      const activeSchedule = await Availability.find({ profileId: profile._id, active: true })
 
-      const savedSchedule = makeActiveSchedule.save()
-  
-      if(!savedSchedule){
-        res.status(500)
-        throw new Error("Schedule was not updated to active")
-      } else {
-        res.status(200).send(schedule)
+      if(activeSchedule.length !== 0){
+        activeSchedule[0].active = false 
+        activeSchedule[0].save()
       }
-    }
+      const makeActiveSchedule = await Availability.findById(req.params.scheduleId)
+
+      if(!makeActiveSchedule){
+        res.status(404)
+        throw new Error("Could not find an active schedule")
+      } else {
+        if(makeActiveSchedule.profileId === profile._id){
+          makeActiveSchedule.active = true 
+
+          const savedSchedule = makeActiveSchedule.save()
+      
+          if(!savedSchedule){
+            res.status(500)
+            throw new Error("Schedule was not updated to active")
+          } else {
+            res.status(200).send(schedule)
+          }
+        }
+      }
+      }
   })
 
