@@ -53,9 +53,11 @@ const RequestInfo: React.FC<{
             </Typography>
           </Grid>
           <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'right' }}>
-            <Box onClick={handleOpen} sx={large ? { cursor: 'pointer', marginTop: -2 } : { cursor: 'pointer' }}>
-              <SettingsIcon color="disabled" fontSize="small" />
-            </Box>
+            {data.status === 'completed' ? null : (
+              <Box onClick={handleOpen} sx={large ? { cursor: 'pointer', marginTop: -2 } : { cursor: 'pointer' }}>
+                <SettingsIcon color="disabled" fontSize="small" />
+              </Box>
+            )}
             <Modal disableAutoFocus={true} open={open} onClose={handleClose}>
               <MyModal data={data} open={open} handleClose={handleClose} handleStatus={handleStatus} />
             </Modal>

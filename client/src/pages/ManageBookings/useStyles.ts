@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
   },
   leftWrapper: {
-    width: '88%',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: 20,

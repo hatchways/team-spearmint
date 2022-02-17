@@ -26,7 +26,7 @@ export default function ManageBookings(): JSX.Element {
       });
       if (index !== -1) {
         const newSitterRequests = [...sitterRequests];
-        newSitterRequests[index] = res;
+        newSitterRequests[index].status = res.status;
         updateSitterRequestsContext(newSitterRequests);
       }
     });
@@ -80,8 +80,8 @@ export default function ManageBookings(): JSX.Element {
 
   return (
     <PageContainer>
-      <Grid sx={{ width: '87%', margin: '0 auto' }} spacing={2} container>
-        <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }} className={classes.leftContainer}>
+      <Grid sx={{ width: '87%', margin: '0 auto' }} spacing={5} container>
+        <Grid item xs={12} md={5} order={{ xs: 2, md: 1 }} className={classes.leftContainer}>
           <Box className={classes.leftWrapper}>
             <Paper className={classes.cardWrapper}>
               <Box className={classes.bookingContent}>
@@ -120,11 +120,11 @@ export default function ManageBookings(): JSX.Element {
             </Paper>
           </Box>
         </Grid>
-        <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }} className={classes.rightContainer}>
+        <Grid item xs={12} md={7} order={{ xs: 1, md: 2 }} className={classes.rightContainer}>
           <Box className={classes.rightWrapper}>
             <Paper className={classes.cardWrapper}>
               <Box className={classes.calendarContainer}>
-                <MyCalendar />
+                <MyCalendar nextRequest={nextRequest} />
               </Box>
             </Paper>
           </Box>

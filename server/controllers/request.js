@@ -24,9 +24,14 @@ exports.getRequests = async (req, res) => {
         const userExists = await User.findOne({ _id: req.user.id });
         if (!userExists) return res.status(404).json({ message: "User doesn't exist" });
         
+        await Request.updateMany(
+            {start: { $lte: new Date() } },
+            {$set: {status: 'completed'}}
+        )
 
         const userProfile = await Profile.findOne({ userId: req.user.id});
-        const typeOfAccount = userProfile.accountType;
+        const typeOfAccount = userProfile.accountType;  
+    
 
         if(typeOfAccount === 'pet_sitter') {
             const requests = await Request.find({ sitterId: req.user.id }).lean();
@@ -72,7 +77,7 @@ exports.updateRequest = async (req, res) => {
         if(theRequest.sitterId.valueOf() !== req.user.id) return res.status(404).json({ message: "This sitter doesn't own this request" });
 
         theRequest.status = newStatus;
-        await theRequest.save();
+        await theRequest.save();       
 
         res.status(200).json(theRequest);
     } catch (error) {
