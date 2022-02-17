@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react';
 import { getProfiles } from '../../helpers/APICalls/getProfiles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
+import SearchBar from './SearchBar/SearchBar';
 
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
 
-  const [profiles, setProfiles] = useState([]);
+  const [profiles, setProfiles] = useState<any[]>([]);
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -38,41 +39,21 @@ export default function Profiles() {
       setCurrentIndicesBottomRow(currentIndicesBottomRow + 6);
     }
   };
-
+  console.log(profiles);
   return (
     <>
       <Box className={classes.flexContainer}>
-        <Typography className={classes.header} variant="h5">
-          Your Search Results
-        </Typography>
-        <Box className={classes.flexRowContainer}>
-          <TextField
-            id="location"
-            fullWidth
-            margin="normal"
-            name="location"
-            placeholder="Your location"
-            autoComplete="location"
-            autoFocus
-          />
-          <TextField
-            className={classes.date}
-            id="dates"
-            placeholder="Your dates"
-            margin="normal"
-            type="date"
-            autoComplete="current-dates"
-          />
-        </Box>
+        <SearchBar></SearchBar>
         <Box>
           <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              return <ProfileCard key={profile} profile={profile}></ProfileCard>;
+              console.log(profile);
+              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
             })}
           </Box>
           <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-              return <ProfileCard key={profile} profile={profile}></ProfileCard>;
+              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
             })}
           </Box>
         </Box>

@@ -7,8 +7,6 @@ const useStyles = makeStyles(() => ({
   cardContainer: {
     height: 275,
     width: 225,
-    // boxShadow: '1px 1px 5px lightgrey, -1px -1px 5px lightgrey',
-    // marginRight: 40,
     textAlign: 'center',
     position: 'relative',
   },
@@ -27,12 +25,10 @@ const useStyles = makeStyles(() => ({
     marginTop: '30px',
     width: '80%',
   },
-  location: {
-    marginRight: '60px !important',
-  },
-  button: {
-    marginTop: '30px !important',
-    marginBottom: '40px !important',
+  divider: {
+    width: '100%',
+    position: 'absolute',
+    top: '85%',
   },
 }));
 
