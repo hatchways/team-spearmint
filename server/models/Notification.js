@@ -4,7 +4,7 @@ const notificationSchema = new mongoose.Schema(
     {
         type: {
             type: String,
-            enum: ["system", "user", "event", "message"],
+            enum: ["system", "event", "users", "message"],
             default: "system",
         },
         title: {
@@ -30,7 +30,6 @@ const notificationSchema = new mongoose.Schema(
         },
         recipientId: {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "User",
         },
     },
