@@ -54,6 +54,13 @@ const availabilitySchema = new mongoose.Schema({
   friday: dayOptions,
   saturday: dayOptions,
   sunday: dayOptions,
+  active: {
+    type: Boolean,
+    default: false
+  },
+  name: {
+    type: String,
+  }
 });
 
 module.exports = Availability = mongoose.model("Availability", availabilitySchema);

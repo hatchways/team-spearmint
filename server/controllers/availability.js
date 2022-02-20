@@ -6,16 +6,27 @@ const mongoose = require("mongoose");
 // @desc create a schedule
 // @access private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
-    const { schedule } = req.body.schedule
-    const profile = await Profile.findOne({userId: req.user.id});
+    console.log(req)
+    console.log(req.body)
+    console.log(req.body.schedule)
 
+    console.log(req.user)
+    const { name, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body.schedule
+    const profile = await Profile.findOne({userId: req.user.id});
     if(!profile){
       res.status(404)
       throw new Error("There is no profile associated with this user!")
     } else {
       const newSchedule = new Availability({
         profileId: profile._id,
-        schedule: schedule
+        monday: monday,
+        tuesday: tuesday,
+        wednesday: wednesday,
+        thursday: thursday,
+        friday: friday,
+        saturday: saturday,
+        sunday: sunday,
+        name: name, 
       })
   
       const savedSchedule = await newSchedule.save()
@@ -67,18 +78,19 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     }
   })
 
-  //@route GET /availability
+  //@route GET /availability/all
   //@desc get all schedules for this profile
   //@access public 
 
   exports.getAllSchedules = asyncHandler(async (req, res, next) => {
+    console.log(req.user)
     const profile = await Profile.findOne({userId: req.user.id});
 
     if(!profile){
       res.status(404)
       throw new Error("Profile not found!")
     } else {
-      const allSchedules = await Availability.find({ profileId: profile._id})
+      const allSchedules = await Availability.find({ profileId: profile.id})
       res.status(200).send(allSchedules)
     }
   })
@@ -95,7 +107,7 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
       throw new Error("Profile not found!")
     } else {
       const activeSchedule = await Availability.find({ profileId: profile._id, active: true })
-
+        console.log(activeSchedule)
       if(activeSchedule.length !== 0){
         activeSchedule[0].active = false 
         activeSchedule[0].save()
@@ -106,16 +118,20 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
         res.status(404)
         throw new Error("Could not find an active schedule")
       } else {
-        if(makeActiveSchedule.profileId === profile._id){
-          makeActiveSchedule.active = true 
+          console.log('HERE I AM')
+          console.log(makeActiveSchedule.profileId.toString() === profile._id.toString())
+        if(makeActiveSchedule.profileId.toString() === profile._id.toString()){
+            console.log('here i am ...i shouldnt be')
 
-          const savedSchedule = makeActiveSchedule.save()
-      
+          makeActiveSchedule.active = true 
+          
+          const savedSchedule = await makeActiveSchedule.save()
+          console.log(savedSchedule)
           if(!savedSchedule){
             res.status(500)
             throw new Error("Schedule was not updated to active")
           } else {
-            res.status(200).send(schedule)
+            res.status(200).send(savedSchedule)
           }
         }
       }
