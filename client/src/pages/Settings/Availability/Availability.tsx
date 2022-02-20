@@ -18,15 +18,10 @@ import StarIcon from '@mui/icons-material/Star';
 import createSchedule from '../../../helpers/APICalls/createSchedule';
 import getAllSchedules from '../../../helpers/APICalls/getAllSchedules';
 import makeActiveSchedule from '../../../helpers/APICalls/makeActiveSchedule';
+import DayOfWeekInput from './DayOfWeekInput/DayOfWeekInput';
 
 interface Props {
   header: string;
-}
-
-interface DayOfWeekInputProps {
-  day: string;
-  values: any;
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
 }
 
 interface Day {
@@ -85,6 +80,9 @@ export default function Availability({ header }: Props): JSX.Element {
   const [schedules, setSchedules] = useState<any[]>([]);
   const [schedule, setSchedule] = useState<schedule>();
   const [showActive, setShowActive] = useState(false);
+  const [newSchedule, setNewSchedule] = useState(false);
+  const [newScheduleCreated, setNewScheduleCreated] = useState(false);
+  const [newScheduleId, setNewScheduleId] = useState<string>('');
 
   console.log(schedules);
 
@@ -114,7 +112,6 @@ export default function Availability({ header }: Props): JSX.Element {
   }, [updateSnackBarMessage]);
 
   const handleMakeActiveSchedule = (scheduleId: any) => {
-    // debugger;
     const id = typeof scheduleId === 'object' ? scheduleId._id : scheduleId;
     makeActiveSchedule(id).then((res) => {
       console.log(res);
@@ -123,14 +120,6 @@ export default function Availability({ header }: Props): JSX.Element {
     updateSnackBarMessage('Schedule is now active!');
   };
 
-  const handleEditSchedule = (e: any) => {
-    const sanitizedSchedule = sanitizeTimes(e);
-  };
-
-  console.log(schedules);
-  const [newSchedule, setNewSchedule] = useState(false);
-  const [newScheduleCreated, setNewScheduleCreated] = useState(false);
-  const [newScheduleId, setNewScheduleId] = useState<string>('');
   const handleNewSchedule = () => {
     setNewSchedule(true);
   };
@@ -170,118 +159,16 @@ export default function Availability({ header }: Props): JSX.Element {
     endTime: '21:00',
   };
 
-  const [selectedStartTime, setSelectedStartTime] = useState(times[6]);
-  const [selectedEndTime, setSelectedEndTime] = useState(times[21]);
-
   const handleScheduleClick = (e: any, index: number) => {
     setSchedule(schedules[index]);
+    setShowActive(false);
   };
 
-  console.log(selectedStartTime);
-  console.log(selectedEndTime);
+  const handleEditSchedule = (e: any) => {
+    console.log(e);
+  };
+
   console.log(schedule);
-  function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeekInputProps) {
-    // console.log(values);
-    const handleCheckBox = (e: any) => {
-      setFieldValue(`${day}.active`, e.target.checked);
-    };
-    const handleStartTime = (e: any) => {
-      if (parseInt(selectedEndTime) !== 0 && !validateTimes(e.currentTarget.id, selectedEndTime)) {
-        updateSnackBarMessage('Start time must be before the end time!');
-      } else {
-        setSelectedStartTime(e.currentTarget.id);
-        setFieldValue(`${day}.startTime`, e.currentTarget.id);
-      }
-    };
-    const handleEndTime = (e: any) => {
-      if (validateTimes(selectedStartTime, e.currentTarget.id)) {
-        setSelectedEndTime(e.currentTarget.id);
-        setFieldValue(`${day}.endTime`, e.currentTarget.id);
-      } else {
-        updateSnackBarMessage('End time must be after the start time!');
-      }
-    };
-
-    const handleChange = (e: any) => {
-      // debugger;
-    };
-
-    const validateTimes = (startTime: string, endTime: string) => {
-      const start = parseInt(startTime);
-      const end = parseInt(endTime);
-      return start < end ? true : false;
-    };
-
-    const getDisabled = (val: any) => {
-      if (val) return { disabled: true };
-      return {};
-    };
-
-    return (
-      <Box
-        className={classes.timeContainer}
-        display="flex"
-        flexDirection="row"
-        justifyContent="flex-start"
-        alignItems="center"
-      >
-        <input onClick={(e) => handleCheckBox(e)} defaultChecked={values && values[day].active} type="checkbox"></input>
-        <p className={classes.dayText}>{day}</p>
-        <FormControl>
-          <InputLabel id="startTimeLabel">Start Time</InputLabel>
-          <Select
-            className={classes.startTime}
-            {...getDisabled(!values[day].active)}
-            id="startTimeSelect"
-            name="startTime"
-            value={values[day].startTime}
-            onChange={(e) => handleChange(e)}
-          >
-            {times.map((time) => {
-              return (
-                <MenuItem
-                  onClick={(e) => {
-                    handleStartTime(e);
-                  }}
-                  key={time}
-                  id={time}
-                  value={time}
-                >
-                  {time}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-        <FormControl>
-          <InputLabel id="endTimeLabel">End Time</InputLabel>
-          <Select
-            className={classes.endTime}
-            {...getDisabled(!values[day].active)}
-            id="endTimeSelect"
-            name="endTime"
-            value={values[day].endTime}
-            onChange={(e) => handleChange(e)}
-          >
-            {times.map((time) => {
-              return (
-                <MenuItem
-                  onClick={(e) => {
-                    handleEndTime(e);
-                  }}
-                  key={time}
-                  id={time}
-                  value={time}
-                >
-                  {time}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Box>
-    );
-  }
 
   return (
     <div>
@@ -290,18 +177,10 @@ export default function Availability({ header }: Props): JSX.Element {
         display="flex"
         flexDirection="column"
         justifyContent="flex-start"
-        // alignItems="center"
         height="100%"
       >
         <SettingHeader header={header} />
-        <Box
-          className={classes.container}
-          display="flex"
-          flexDirection="row"
-          justifyContent="flex-start"
-          // alignItems="center"
-          // height="100%"
-        >
+        <Box className={classes.container} display="flex" flexDirection="row" justifyContent="flex-start">
           <FormControl className={classes.select}>
             <InputLabel id="scheduleName">Select</InputLabel>
             <Select id="scheduleName" name="schedule">
@@ -330,7 +209,7 @@ export default function Availability({ header }: Props): JSX.Element {
             Add Schedule +
           </Button>
         </Box>
-        {schedule && !newSchedule && (
+        {schedule && (
           <>
             <Formik initialValues={schedule} onSubmit={handleEditSchedule}>
               {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
@@ -377,7 +256,7 @@ export default function Availability({ header }: Props): JSX.Element {
             </Formik>
           </>
         )}
-        {newSchedule && (
+        {newSchedule && !schedule && (
           <>
             <Formik
               initialValues={{
@@ -422,18 +301,27 @@ export default function Availability({ header }: Props): JSX.Element {
             >
               {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
                 <form className={classes.form} onSubmit={handleSubmit}>
-                  <FormInput
-                    className={classes.scheduleNameInput}
-                    id="scheduleSelect"
-                    label="New Schedule"
-                    margin="dense"
-                    name="name"
-                    placeholder="Schedule name"
-                    autoComplete="name"
-                    autoFocus
-                    value={values.name}
-                    onChange={handleChange}
-                  />
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    // justifyContent="center"
+                    alignItems="center"
+                    height="100%"
+                  >
+                    <FormInput
+                      className={classes.scheduleNameInput}
+                      id="scheduleSelect"
+                      label="New Schedule"
+                      margin="dense"
+                      name="name"
+                      placeholder="Schedule name"
+                      autoComplete="name"
+                      autoFocus
+                      value={values.name}
+                      onChange={handleChange}
+                    />
+                    {showActive && <StarIcon></StarIcon>}
+                  </Box>
                   {daysOfTheWeek.map((day) => {
                     return (
                       <DayOfWeekInput
@@ -456,12 +344,9 @@ export default function Availability({ header }: Props): JSX.Element {
                     </Button>
                     {newScheduleCreated && (
                       <Button onClick={() => handleMakeActiveSchedule(newScheduleId)}>
-                        Make Active Schedule<StarIcon></StarIcon>
+                        Make Active<StarIcon></StarIcon>
                       </Button>
                     )}
-                    <Button>
-                      Delete Schedule <DeleteIcon></DeleteIcon>
-                    </Button>
                   </Box>
                 </form>
               )}
