@@ -12,6 +12,7 @@ export default function Profiles() {
   const { updateSnackBarMessage } = useSnackBar();
 
   const [profiles, setProfiles] = useState<any[]>([]);
+  const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
 
   useEffect(() => {
     const loadProfiles = async () => {
@@ -39,25 +40,70 @@ export default function Profiles() {
       setCurrentIndicesBottomRow(currentIndicesBottomRow + 6);
     }
   };
-  console.log(profiles);
+
+  const [searchLocation, setSearchLocation] = useState<string>();
+  const [searchDate, setSearchDate] = useState<string>();
+
+  const handleSearchClick = () => {
+    if (searchLocation && searchDate) {
+      const filteredProfiles = filterProfiles(searchLocation, searchDate);
+    } else if (searchLocation) {
+      const filteredProfiles = filterProfiles(searchLocation, undefined);
+      setFilteredProfiles(filteredProfiles);
+      console.log(profiles);
+    } else if (searchDate) {
+      const filteredProfiles = filterProfiles(undefined, searchDate);
+    }
+  };
+
+  const filterProfiles = (location: string | undefined, date: string | undefined) => {
+    return profiles.filter((profile) => profile.address.includes(location));
+  };
+
+  useEffect(() => {
+    if (!searchLocation) {
+      setFilteredProfiles([]);
+    }
+  }, [searchLocation, searchDate]);
+
   return (
     <>
       <Box className={classes.flexContainer}>
-        <SearchBar></SearchBar>
-        <Box>
-          <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              console.log(profile);
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+        <SearchBar
+          searchLocation={searchLocation}
+          setSearchLocation={setSearchLocation}
+          searchDate={searchDate}
+          setSearchDate={setSearchDate}
+          handleSearchClick={handleSearchClick}
+        ></SearchBar>
+        {filteredProfiles.length === 0 && (
+          <Box>
+            <Box className={classes.innerFlexRowContainer}>
+              {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
+            </Box>
+            <Box className={classes.innerFlexRowContainer}>
+              {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
+            </Box>
           </Box>
-          <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+        )}
+        {filteredProfiles.length > 0 && (
+          <Box>
+            <Box className={classes.innerFlexRowContainer}>
+              {filteredProfiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
+            </Box>
+            <Box className={classes.innerFlexRowContainer}>
+              {filteredProfiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
+            </Box>
           </Box>
-        </Box>
-
+        )}
         <Button
           onClick={() => showMoreProfiles()}
           size="large"
