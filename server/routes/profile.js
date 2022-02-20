@@ -5,6 +5,7 @@ const {
   editProfile,
   loadProfile,
   loadProfiles,
+  searchProfiles
 } = require('../controllers/profile');
 
 router.route('/edit').put(protect, editProfile);
