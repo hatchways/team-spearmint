@@ -12,6 +12,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 75,
     marginLeft: 10,
   },
+  nextButton: {
+    float: 'right',
+  },
+  checkIcon: {
+    cursor: 'pointer',
+  },
 }));
 
 export default useStyles;

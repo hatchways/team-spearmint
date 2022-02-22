@@ -6,10 +6,10 @@ import { Box, Button, CircularProgress } from '@mui/material';
 import useStyles from './useStyles';
 
 interface Props {
-  setPaymentMethods: React.Dispatch<React.SetStateAction<any[]>>;
+  setReloadPaymentMethods: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function CheckoutForm({ setPaymentMethods }: Props) {
+export default function CheckoutForm({ setReloadPaymentMethods }: Props) {
   const { updateSnackBarMessage } = useSnackBar();
   const classes = useStyles();
   const [newCard, setNewCard] = useState(false);
@@ -49,6 +49,7 @@ export default function CheckoutForm({ setPaymentMethods }: Props) {
         console.log(setupIntent);
         setSavingCard(false);
         setNewCard(false);
+        setReloadPaymentMethods(true);
       }
     }
   };
