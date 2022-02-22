@@ -4,13 +4,11 @@ require('dotenv').config();
 const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const createCustomer = async(profile, email) => {
-  console.log(profile, profile.name)
   const customer = await stripe.customers.create({
     name: profile.name,
     address: profile.address,
     email: email,
   });
-  console.log("here", customer)
   if(!customer){
     throw new Error("Unable to create a customer, please try again!")
   } else {
@@ -29,18 +27,14 @@ const createCustomer = async(profile, email) => {
 // @desc create a stripe customer and add a card payment to that customer
 // @access private
 exports.addPaymentMethod = asyncHandler(async (req, res, next) => {
-  // console.log(req)
-  console.log(req.user)
+
   let profile = await Profile.findOne({ userId: req.user.id })
   let user = await User.findById(req.user.id)
-  console.log('here')
-  console.log(user, profile)
   if(!profile){
     res.status(404)
     throw new Error("Profile not found!")
   } else {
     if(!profile.customerId){
-      console.log('here in here')
       profile = await createCustomer(profile, user.email)
       if(!profile){
         res.status(500)
@@ -61,6 +55,71 @@ exports.addPaymentMethod = asyncHandler(async (req, res, next) => {
 
     res.status(201).send({clientSecret: paymentIntent.client_secret, billingDetails: billingDetails})
     
+  }
+})
+
+const getAllPaymentMethods = async (profile) => {
+  const paymentMethods = await stripe.paymentMethods.list({
+    customer: profile.customerId,
+    type: 'card',
+  });
+
+  if(!paymentMethods){
+    throw new Error("There was an error retrieving payment options!")
+  } else {
+    return paymentMethods.data.map((payment) => {
+      return {
+        brand: payment.card.brand,
+        last4: payment.card.last4,
+        experationMonth: payment.card.exp_month,
+        experationYear: payment.card.exp_year,
+        name: payment.billing_details.name,
+        id: payment.id
+      }
+    })
+  }
+}
+
+// @route GET "/payment/all-payment-methods"
+// @desc Get all payment methods associated with an account
+// @access private
+exports.getPaymentMethods = asyncHandler(async (req, res, next) => {
+  console.log(req.user.id)
+  const profile = await Profile.findOne({ userId: req.user.id })
+
+  if(!profile){
+    res.status(404)
+    throw new Error("No profile found!")
+  } else {
+    if(!profile.customerId){
+      res.status(200).send({ paymentMethods: []})
+    } else {
+      const allPaymentMethods = await getAllPaymentMethods(profile)
+      console.log(allPaymentMethods)
+      if(allPaymentMethods.length === 0){
+        return res.status(200).send({ paymentMethods: []})
+      } else {
+          console.log(profile.customerId)
+          const customer = await stripe.customers.retrieve(profile.customerId)
+          console.log(customer)
+          let defaultPaymentMethod = customer.invoice_settings.default_payment_method
+
+          if(!defaultPaymentMethod){
+            defaultPaymentMethod = allPaymentMethods[0].id
+
+            const updatedCustomer = await stripe.customers.update(profile.customerId, {
+              invoice_settings: { default_payment_method: defaultPaymentMethod}
+            })
+
+            if(!updatedCustomer){
+              res.status(500)
+              throw new Error("There was an error updating default payment method!")
+            }
+          } 
+
+          res.status(200).send({ paymentMethods: allPaymentMethods, defaultPaymentMethod: defaultPaymentMethod})
+      }
+    }
   }
 })
 // exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
