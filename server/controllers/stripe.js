@@ -95,13 +95,10 @@ exports.getPaymentMethods = asyncHandler(async (req, res, next) => {
       res.status(200).send({ paymentMethods: []})
     } else {
       const allPaymentMethods = await getAllPaymentMethods(profile)
-      console.log(allPaymentMethods)
       if(allPaymentMethods.length === 0){
         return res.status(200).send({ paymentMethods: []})
       } else {
-          console.log(profile.customerId)
           const customer = await stripe.customers.retrieve(profile.customerId)
-          console.log(customer)
           let defaultPaymentMethod = customer.invoice_settings.default_payment_method
 
           if(!defaultPaymentMethod){
@@ -122,22 +119,27 @@ exports.getPaymentMethods = asyncHandler(async (req, res, next) => {
     }
   }
 })
-// exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
-//   const { items } = req.body;
-//   console.log(req.body)
-//   const calculateOrderAmount = () => {
 
-//   } 
-//   // Create a PaymentIntent with the order amount and currency
-//   const paymentIntent = await stripe.paymentIntents.create({
-//     amount: 100,
-//     currency: "usd",
-//     automatic_payment_methods: {
-//       enabled: true,
-//     },
-//   });
-//   console.log(paymentIntent)
-//   res.send({
-//     clientSecret: paymentIntent.client_secret,
-//   });
-// });
+//@route PATCH "/payment/set-default/:paymentId"
+//@desc Update default payment method
+//@access private
+
+exports.setDefaultPaymentMethod = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findOne({ userId: req.user.id })
+
+  if(!profile){
+    res.status(404)
+    throw new Error("No profile found!")
+  } else {
+    const updatedCustomer = await stripe.customers.update(profile.customerId, {
+      invoice_settings: { default_payment_method: req.params.paymentId }
+    })
+
+    if(!updatedCustomer){
+      res.status(500)
+      throw new Error("There was issue setting default payment!")
+    } else {
+      res.status(200).send({ success: updatedCustomer })
+    }
+  }
+})
