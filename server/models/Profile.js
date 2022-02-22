@@ -37,6 +37,9 @@ const profileSchema = new mongoose.Schema({
   accountType: {
     type: String, 
     enum: ["pet_sitter", "pet_owner"]
+  }, 
+  customerId: {
+    type: String
   }
 });
 

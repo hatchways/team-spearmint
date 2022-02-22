@@ -50,7 +50,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
 app.use(uploadRouter);
-app.use(paymentRouter);
+app.use("/payment", paymentRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
