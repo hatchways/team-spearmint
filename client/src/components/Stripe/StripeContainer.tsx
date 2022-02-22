@@ -18,18 +18,18 @@ interface Props {
 const StripeContainer = ({ header }: Props) => {
   const [clientSecret, setClientSecret] = useState('');
 
-  useEffect(() => {
-    const fetchOptions: FetchOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ price: [{ id: 'dog_sitting' }] }),
-      credentials: 'include',
-    };
-    // Create PaymentIntent as soon as the page loads
-    fetch('/create-payment-intent', fetchOptions)
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+  // useEffect(() => {
+  //   const fetchOptions: FetchOptions = {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ price: [{ id: 'dog_sitting' }] }),
+  //     credentials: 'include',
+  //   };
+  //   // Create PaymentIntent as soon as the page loads
+  //   fetch('/create-payment-intent', fetchOptions)
+  //     .then((res) => res.json())
+  //     .then((data) => setClientSecret(data.clientSecret));
+  // }, []);
 
   const appearance: Appearance = {
     theme: 'stripe',
@@ -47,13 +47,9 @@ const StripeContainer = ({ header }: Props) => {
   return (
     <>
       <SettingHeader header={header} />
-      {clientSecret && (
-        <>
-          <Elements options={options} stripe={stripeTestPromise}>
-            <CheckoutForm />
-          </Elements>
-        </>
-      )}
+      <Elements stripe={stripeTestPromise}>
+        <CheckoutForm />
+      </Elements>
     </>
   );
 };
