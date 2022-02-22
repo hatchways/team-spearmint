@@ -44,19 +44,6 @@ export default function CheckoutForm() {
         console.log(setupIntent);
       }
     }
-    // if (stripe) {
-    //   const { error, paymentMethod } = await stripe.createPaymentMethod({
-    //     type: 'card',
-    //     card: elements.getElement(CardElement)!,
-    //   });
-
-    //   if (!error) {
-    //     console.log('Stripe 23 | token generated!', paymentMethod);
-    //     //send token to backend here
-    //   } else {
-    //     console.log(error.message);
-    //   }
-    // }
   };
 
   return (
@@ -64,7 +51,7 @@ export default function CheckoutForm() {
       {newCard ? (
         <form onSubmit={handleSubmit} className={classes.form}>
           <CardElement />
-          <Button type="submit" color="primary" variant="outlined" className={classes.formButton}>
+          <Button type="submit" color="primary" variant="outlined" sx={{ marginTop: 2.5 }}>
             {savingCard ? <CircularProgress size="2rem" thickness={1.5} /> : 'Add card'}
           </Button>
         </form>

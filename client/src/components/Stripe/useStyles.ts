@@ -45,14 +45,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     objectFit: 'cover',
   },
   form: {
-    width: '50%',
+    border: 'solid 2px black',
+    width: '100%',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-  },
-  formButton: {
-    marginTop: theme.spacing(2),
   },
 }));
 

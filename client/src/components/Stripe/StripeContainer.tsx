@@ -12,10 +12,7 @@ const PUBLIC_KEY =
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
-interface Props {
-  header: string;
-}
-const StripeContainer = ({ header }: Props) => {
+const StripeContainer = () => {
   const [clientSecret, setClientSecret] = useState('');
 
   // useEffect(() => {
@@ -40,14 +37,13 @@ const StripeContainer = ({ header }: Props) => {
     },
   };
   const options: StripeElementsOptions = {
-    clientSecret,
+    // clientSecret,
     appearance,
   };
 
   return (
     <>
-      <SettingHeader header={header} />
-      <Elements stripe={stripeTestPromise}>
+      <Elements options={options} stripe={stripeTestPromise}>
         <CheckoutForm />
       </Elements>
     </>
