@@ -5,7 +5,11 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import { Box, Button, CircularProgress } from '@mui/material';
 import useStyles from './useStyles';
 
-export default function CheckoutForm() {
+interface Props {
+  setPaymentMethods: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+export default function CheckoutForm({ setPaymentMethods }: Props) {
   const { updateSnackBarMessage } = useSnackBar();
   const classes = useStyles();
   const [newCard, setNewCard] = useState(false);
@@ -15,8 +19,9 @@ export default function CheckoutForm() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+    setSavingCard(true);
     if (!elements || !stripe) {
+      setSavingCard(false);
       return;
     }
 
@@ -42,6 +47,8 @@ export default function CheckoutForm() {
       } else if (setupIntent) {
         updateSnackBarMessage('Successfully created new payment method');
         console.log(setupIntent);
+        setSavingCard(false);
+        setNewCard(false);
       }
     }
   };

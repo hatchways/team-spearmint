@@ -12,7 +12,11 @@ const PUBLIC_KEY =
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
-const StripeContainer = () => {
+interface Props {
+  setPaymentMethods: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+const StripeContainer = ({ setPaymentMethods }: Props) => {
   const [clientSecret, setClientSecret] = useState('');
 
   // useEffect(() => {
@@ -44,7 +48,7 @@ const StripeContainer = () => {
   return (
     <>
       <Elements options={options} stripe={stripeTestPromise}>
-        <CheckoutForm />
+        <CheckoutForm setPaymentMethods={setPaymentMethods} />
       </Elements>
     </>
   );
