@@ -18,7 +18,7 @@ import createSchedule from '../../../helpers/APICalls/createSchedule';
 import getAllSchedules from '../../../helpers/APICalls/getAllSchedules';
 import makeActiveSchedule from '../../../helpers/APICalls/makeActiveSchedule';
 import DayOfWeekInput from './DayOfWeekInput/DayOfWeekInput';
-
+import ScheduleForm from './ScheduleForm/ScheduleForm';
 interface Props {
   header: string;
 }
@@ -160,6 +160,7 @@ export default function Availability({ header }: Props): JSX.Element {
   };
 
   const handleScheduleClick = (e: any, index: number) => {
+    console.log(index);
     setSchedule(schedules[index]);
     setShowActive(false);
   };
@@ -170,7 +171,6 @@ export default function Availability({ header }: Props): JSX.Element {
   };
 
   console.log(schedule);
-
   return (
     <div>
       <Box
@@ -211,51 +211,12 @@ export default function Availability({ header }: Props): JSX.Element {
           </Button>
         </Box>
         {schedule && (
-          <>
-            <Formik initialValues={schedule} onSubmit={handleEditSchedule}>
-              {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
-                <form onSubmit={handleSubmit}>
-                  <FormInput
-                    className={classes.scheduleNameInput}
-                    id="scheduleSelect"
-                    label="Schedule"
-                    margin="dense"
-                    name="name"
-                    placeholder="Schedule name"
-                    autoComplete="name"
-                    autoFocus
-                    value={values.name}
-                    onChange={handleChange}
-                  />
-                  {showActive && <StarIcon></StarIcon>}
-                  {daysOfTheWeek.map((day) => {
-                    return (
-                      <DayOfWeekInput
-                        values={values}
-                        setFieldValue={setFieldValue}
-                        key={day}
-                        day={day}
-                      ></DayOfWeekInput>
-                    );
-                  })}
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="center"
-                    // alignItems="center"
-                    height="100%"
-                  >
-                    <Button onClick={() => handleMakeActiveSchedule(values)}>
-                      Make Active <StarIcon></StarIcon>
-                    </Button>
-                    <Button>
-                      Delete Schedule <DeleteIcon></DeleteIcon>
-                    </Button>
-                  </Box>
-                </form>
-              )}
-            </Formik>
-          </>
+          <ScheduleForm
+            schedule={schedule}
+            handleEditSchedule={handleEditSchedule}
+            showActive={showActive}
+            handleMakeActiveSchedule={handleMakeActiveSchedule}
+          ></ScheduleForm>
         )}
         {newSchedule && !schedule && (
           <>
