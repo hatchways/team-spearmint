@@ -84,7 +84,6 @@ const getAllPaymentMethods = async (profile) => {
 // @desc Get all payment methods associated with an account
 // @access private
 exports.getPaymentMethods = asyncHandler(async (req, res, next) => {
-  console.log(req.user.id)
   const profile = await Profile.findOne({ userId: req.user.id })
 
   if(!profile){
