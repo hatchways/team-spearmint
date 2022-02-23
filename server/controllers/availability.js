@@ -6,11 +6,6 @@ const mongoose = require("mongoose");
 // @desc create a schedule
 // @access private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
-    console.log(req)
-    console.log(req.body)
-    console.log(req.body.schedule)
-
-    console.log(req.user)
     const { name, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body.schedule
     const profile = await Profile.findOne({userId: req.user.id});
     if(!profile){
@@ -19,14 +14,14 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     } else {
       const newSchedule = new Availability({
         profileId: profile._id,
-        monday: monday,
-        tuesday: tuesday,
-        wednesday: wednesday,
-        thursday: thursday,
-        friday: friday,
-        saturday: saturday,
-        sunday: sunday,
-        name: name, 
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        sunday,
+        name, 
       })
   
       const savedSchedule = await newSchedule.save()
@@ -83,7 +78,6 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   //@access public 
 
   exports.getAllSchedules = asyncHandler(async (req, res, next) => {
-    console.log(req.user)
     const profile = await Profile.findOne({userId: req.user.id});
 
     if(!profile){
@@ -105,9 +99,10 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     if(!profile){
       res.status(404)
       throw new Error("Profile not found!")
+      
     } else {
       const activeSchedule = await Availability.find({ profileId: profile._id, active: true })
-        console.log(activeSchedule)
+
       if(activeSchedule.length !== 0){
         activeSchedule[0].active = false 
         activeSchedule[0].save()
@@ -117,16 +112,14 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
       if(!makeActiveSchedule){
         res.status(404)
         throw new Error("Could not find an active schedule")
+
       } else {
-          console.log('HERE I AM')
-          console.log(makeActiveSchedule.profileId.toString() === profile._id.toString())
         if(makeActiveSchedule.profileId.toString() === profile._id.toString()){
-            console.log('here i am ...i shouldnt be')
 
           makeActiveSchedule.active = true 
           
           const savedSchedule = await makeActiveSchedule.save()
-          console.log(savedSchedule)
+
           if(!savedSchedule){
             res.status(500)
             throw new Error("Schedule was not updated to active")
