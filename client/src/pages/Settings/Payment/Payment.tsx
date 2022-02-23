@@ -73,8 +73,6 @@ export default function Payment({ header }: Props) {
       setCurrentIndex((prev) => prev + 2);
     }
   };
-  console.log(paymentMethods);
-  console.log(defaultPaymentMethod);
 
   return (
     <>
@@ -99,7 +97,7 @@ export default function Payment({ header }: Props) {
               <>
                 <Card className={classes.paymentCard}>
                   <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
-                    <img className={classes.cardLogo} src={logo()}></img>
+                    <img alt="Logo" className={classes.cardLogo} src={logo()}></img>
                     <Box
                       className={classes.checkIcon}
                       onClick={() => handleSetDefaultClick(id)}

@@ -3,8 +3,6 @@ import { FetchOptions } from './../../interface/FetchOptions';
 export const createPayment = async () => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
-    // headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify({ id: profileId }),
     credentials: 'include',
   };
   return await fetch(`/payment/add-payment`, fetchOptions)
