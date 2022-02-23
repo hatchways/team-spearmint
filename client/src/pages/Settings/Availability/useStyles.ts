@@ -14,9 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   timeContainer: {
     marginBottom: 20,
-    // marginRight: '20%',
     width: '100%',
-    // backgroundColor: 'red',
   },
   saveButton: {
     backgroundColor: 'red',
@@ -31,10 +29,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   scheduleNameInput: {
     width: '80%',
-    // marginLeft: '20%',
-  },
-  form: {
-    // marginLeft: '20%',
   },
   startTime: {
     marginRight: 10,

@@ -1,4 +1,15 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 import useStyles from './useStyles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Formik } from 'formik';
@@ -41,10 +52,9 @@ const times = [
 
 export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeekInputProps) {
   const { updateSnackBarMessage } = useSnackBar();
-  console.log(values);
 
   const classes = useStyles();
-  // console.log(values);
+
   const handleCheckBox = (e: any) => {
     setFieldValue(`${day}.active`, e.target.checked);
   };
@@ -52,21 +62,15 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
     if (parseInt(values[day].endTime) !== 0 && !validateTimes(e.currentTarget.id, values[day].endTime)) {
       updateSnackBarMessage('Start time must be before the end time!');
     } else {
-      // setSelectedStartTime(e.currentTarget.id);
       setFieldValue(`${day}.startTime`, e.currentTarget.id);
     }
   };
   const handleEndTime = (e: any) => {
     if (validateTimes(values[day].startTime, e.currentTarget.id)) {
-      // setSelectedEndTime(e.currentTarget.id);
       setFieldValue(`${day}.endTime`, e.currentTarget.id);
     } else {
       updateSnackBarMessage('End time must be after the start time!');
     }
-  };
-
-  const handleChange = (e: any) => {
-    // debugger;
   };
 
   const validateTimes = (startTime: string, endTime: string) => {
@@ -88,8 +92,11 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
       justifyContent="flex-start"
       alignItems="center"
     >
-      <input onClick={(e) => handleCheckBox(e)} defaultChecked={values && values[day].active} type="checkbox"></input>
-      <p className={classes.dayText}>{day}</p>
+      <FormControlLabel
+        sx={{ marginLeft: 1, marginRight: 15, width: 20 }}
+        control={<Checkbox onChange={(e) => handleCheckBox(e)} checked={values && values[day].active} defaultChecked />}
+        label={day}
+      />
       <FormControl>
         <InputLabel id="startTimeLabel">Start Time</InputLabel>
         <Select
@@ -98,7 +105,6 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
           id="startTimeSelect"
           name="startTime"
           value={values[day].startTime}
-          onChange={(e) => handleChange(e)}
         >
           {times.map((time) => {
             return (
@@ -124,7 +130,6 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
           id="endTimeSelect"
           name="endTime"
           value={values[day].endTime}
-          onChange={(e) => handleChange(e)}
         >
           {times.map((time) => {
             return (

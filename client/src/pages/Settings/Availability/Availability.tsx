@@ -1,6 +1,5 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import SettingHeader from '../../../components/SettingsHeader/SettingsHeader';
-// import TimePicker from 'react-ts-timepicker';
 import { SetStateAction, useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -114,21 +113,22 @@ export default function Availability({ header }: Props): JSX.Element {
   const handleMakeActiveSchedule = (scheduleId: any) => {
     const id = typeof scheduleId === 'object' ? scheduleId._id : scheduleId;
     makeActiveSchedule(id).then((res) => {
-      console.log(res);
       setShowActive(true);
     });
     updateSnackBarMessage('Schedule is now active!');
   };
 
   const handleNewSchedule = () => {
+    if (schedule) {
+      setSchedule(undefined);
+    }
     setNewSchedule(true);
+    setShowActive(false);
   };
 
   const handleNewSubmit = (e: any) => {
-    console.log(e);
     const sanitizedSchedule = sanitizeTimes(e);
     createSchedule(sanitizedSchedule).then((res) => {
-      console.log(res);
       setNewScheduleId(res._id);
     });
     updateSnackBarMessage('Your new schedule was created!');
@@ -164,6 +164,7 @@ export default function Availability({ header }: Props): JSX.Element {
     setShowActive(false);
   };
 
+  //will use, need to have a function on formik onSubmit or errors out
   const handleEditSchedule = (e: any) => {
     console.log(e);
   };
@@ -182,7 +183,7 @@ export default function Availability({ header }: Props): JSX.Element {
         <SettingHeader header={header} />
         <Box className={classes.container} display="flex" flexDirection="row" justifyContent="flex-start">
           <FormControl className={classes.select}>
-            <InputLabel id="scheduleName">Select</InputLabel>
+            <InputLabel id="scheduleName">Schedules</InputLabel>
             <Select id="scheduleName" name="schedule">
               {schedules &&
                 schedules.map((schedule, index) => {
@@ -213,7 +214,7 @@ export default function Availability({ header }: Props): JSX.Element {
           <>
             <Formik initialValues={schedule} onSubmit={handleEditSchedule}>
               {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
-                <form className={classes.form} onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                   <FormInput
                     className={classes.scheduleNameInput}
                     id="scheduleSelect"
@@ -300,14 +301,8 @@ export default function Availability({ header }: Props): JSX.Element {
               onSubmit={handleNewSubmit}
             >
               {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
-                <form className={classes.form} onSubmit={handleSubmit}>
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    // justifyContent="center"
-                    alignItems="center"
-                    height="100%"
-                  >
+                <form onSubmit={handleSubmit}>
+                  <Box display="flex" flexDirection="row" alignItems="center" height="100%">
                     <FormInput
                       className={classes.scheduleNameInput}
                       id="scheduleSelect"
@@ -332,17 +327,13 @@ export default function Availability({ header }: Props): JSX.Element {
                       ></DayOfWeekInput>
                     );
                   })}
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="center"
-                    // alignItems="center"
-                    height="100%"
-                  >
-                    <Button type="submit" className={classes.saveButton}>
-                      Save Schedule
-                    </Button>
-                    {newScheduleCreated && (
+                  <Box display="flex" flexDirection="row" justifyContent="center" height="100%">
+                    {!newScheduleCreated && (
+                      <Button type="submit" className={classes.saveButton}>
+                        Save Schedule
+                      </Button>
+                    )}
+                    {newScheduleCreated && !showActive && (
                       <Button onClick={() => handleMakeActiveSchedule(newScheduleId)}>
                         Make Active<StarIcon></StarIcon>
                       </Button>
