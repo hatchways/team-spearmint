@@ -9,6 +9,6 @@ const {
 
 router.route('/edit').put(protect, editProfile);
 
-router.route('/load').get(protect, loadProfile);
+router.route('/load/:id').get(protect, loadProfile);
 
 module.exports = router;

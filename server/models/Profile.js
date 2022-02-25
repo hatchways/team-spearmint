@@ -17,6 +17,7 @@ const profileSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: ['male', 'female', 'other'],
+    default: 'other',
   },
   address: {
     type: String,
@@ -36,8 +37,29 @@ const profileSchema = new mongoose.Schema({
   },
   accountType: {
     type: String, 
-    enum: ["pet_sitter", "pet_owner"]
-  }
+    enum: ["pet_sitter", "pet_owner"],
+    default: "pet_owner",
+  }, 
+  price: {
+    type: Number,
+    default: 15
+  },
+  caption: {
+    type: String,
+    default: 'Professional Dog Trainer'
+  },
+  coverPicture: {
+    type: String,
+    default: "https://book.gettimely.com/images/default-cover-image.jpg",
+  },
+  rate: {
+    type: Number,
+    default: 5,
+  },
+  gallery: {
+    type: [String],
+    default: [],
+  },
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);

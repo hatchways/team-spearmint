@@ -2,11 +2,16 @@ export interface Profile {
   userId: string;
   name: string;
   description: string;
-  gender: ['male', 'female', 'other'];
+  gender: string;
   address: string;
   telephone: string;
   birthday: Date;
   photo: string;
-  accountType: ['pet_sitter', 'pet_owner'];
+  accountType: string;
   _id: string;
+  caption: string;
+  coverPicture: string;
+  gallery: string[];
+  price: number;
+  rate: number;
 }
