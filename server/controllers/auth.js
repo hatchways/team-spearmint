@@ -62,6 +62,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @desc Login user
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
+
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -85,8 +86,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
           name: user.name,
           email: user.email
         }, 
-
         profile
+
       }
     });
   } else {

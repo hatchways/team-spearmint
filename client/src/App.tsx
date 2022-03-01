@@ -16,6 +16,8 @@ import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+
 
 function App(): JSX.Element {
   return (

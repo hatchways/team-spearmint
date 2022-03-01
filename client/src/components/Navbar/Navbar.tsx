@@ -23,6 +23,7 @@ import loadProfile from '../../helpers/APICalls/loadProfile';
 import { Profile } from '../../interface/Profile';
 import { useSnackBar } from '../../context/useSnackbarContext';
 
+
 const Navbar: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
