@@ -3,58 +3,37 @@ const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 
 exports.createNotification = asyncHandler(async (req, res, next) => {
-    try {
-        const theNotification = await Notification.create(req.body);
-        res.status(200).json(theNotification);
-    } catch (err) {
-        res.status(500).json({ message: error.message });
-    }
+    const {type, title, message, isRead, reatAt, recipientId} = req.body;
+    const theNotification = await Notification.create(type, title, message, isRead, reatAt, recipientId);
+    res.status(200).json(theNotification);
 });
 
 exports.markAsRead = asyncHandler(async (req, res, next) => {
     const { notificationId } = req.params;
-    try {
-        const theNotification = await Notification.findOne({ _id: notificationId });
+    const { userId } =req.body
+
+    const theNotification = await Notification.findOne({ _id: notificationId });
+   
+    if(theNotification.recipientId === userId) {
         theNotification.isRead = true;
         await theNotification.save();
         res.status(200).json(theNotification);
-    } catch (err) {
-        res.status(500).json({ message: error.message });
+    } else {
+        res.status(404).json({ message: "The notification doesn't belong to this user" });
     }
 });
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-    try {
-        const {type, recipientId} = req.body;
-        
-        if(type !== "message"){
-            const AllNotifications = await Notification.find();
-            if (AllNotifications.length === 0) res.status(404).json({ message: "There is no notification" });
-            res.status(200).json(AllNotifications);
-        } else {
-            const notifications = await Notification.find({ recipientId: recipientId });
-            if (notifications.length === 0) res.status(404).json({ message: "There is no notification" });
-            res.status(200).json(notifications);
-        }
-    } catch (err) {
-        res.status(500).json({ message: error.message });
-    }
+    const {recipientId} = req.user.id;
+
+        const AllNotifications = await Notification.find();
+        res.status(200).json(AllNotifications);
 });
 
 exports.getUnread = asyncHandler(async (req, res, next) => {
-    try {
-        const {type, recipientId} = req.body;
-        if(type !== "message"){
-            const AllUnread = await Notification.find({ isRead: false });
-            if (AllUnread.length === 0) res.status(404).json({ message: "There is no unread notification" });
+    const {type, recipientId} = req.body;
 
-            res.status(200).json(AllNotifications);
-        } else {
-            const unread = await Notification.find({ recipientId: recipientId, isRead: false });
-            if (unread.length === 0) res.status(404).json({ message: "There is no unread notification" });
-            res.status(200).json(unread);
-        }
-    } catch (err) {
-        res.status(500).json({ message: error.message });
-    }
+        const AllUnread = await Notification.find({ isRead: false });
+        res.status(200).json(AllUnread);
+
 });

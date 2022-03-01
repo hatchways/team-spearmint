@@ -23,14 +23,10 @@ const notificationSchema = new mongoose.Schema(
             type: Date,
             default: Date.now(),
         },
-        senderId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "User",
-        },
         recipientId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
+            required: true,
         },
     },
     {
