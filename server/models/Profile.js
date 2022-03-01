@@ -37,6 +37,14 @@ const profileSchema = new mongoose.Schema({
   accountType: {
     type: String, 
     enum: ["pet_sitter", "pet_owner"]
+  }, 
+  price: {
+    type: Number,
+    default: 15
+  },
+  caption: {
+    type: String,
+    default: 'Professional Dog Trainer'
   }
 });
 

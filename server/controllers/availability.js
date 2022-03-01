@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 // @access private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
     const { name, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body.schedule
+
     const profile = await Profile.findOne({userId: req.user.id});
     if(!profile){
       res.status(404)
@@ -41,19 +42,16 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
   exports.getSchedule = asyncHandler(async (req, res, next) => {
     const schedule = await Availability.findOne({ _id: req.params.scheduleId})
     const profile = await Profile.findOne({userId: req.user.id});
-
-    if(schedule.profileId === profile._id) {
-      if(!schedule){
-        res.status(404)
-        throw new Error("There is no schedule found!")
-      } else {
-        res.status(200).send(schedule)
-      }
+    
+    if(!schedule){
+      res.status(404)
+      throw new Error("There is no schedule found!")
+    } else if(schedule.profileId === profile._id) {
+      res.status(200).send(schedule)
     } else {
       res.status(401)
       throw new Error("You are unauthorized to take this action!")
     }
-    
   })
 
   // @route GET /availability/active
@@ -103,7 +101,7 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     } else {
       const activeSchedule = await Availability.find({ profileId: profile._id, active: true })
 
-      if(activeSchedule.length !== 0){
+      if(!activeSchedule.length){
         activeSchedule[0].active = false 
         activeSchedule[0].save()
       }

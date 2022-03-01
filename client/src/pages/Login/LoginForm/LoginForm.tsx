@@ -5,6 +5,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
+import DemoButton from '../../../components/DemoButton/DemoButton';
 
 interface Props {
   handleSubmit: (
@@ -75,7 +76,8 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
             onChange={handleChange}
           />
 
-          <Box textAlign="center" marginTop={5}>
+          <Box display="flex" alignItems="center" justifyContent="space-around" marginTop={5}>
+            <DemoButton />
             <Button
               type="submit"
               size="large"
