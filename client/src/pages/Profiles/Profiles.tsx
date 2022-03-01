@@ -43,11 +43,10 @@ export default function Profiles() {
   return (
     <>
       <Box className={classes.flexContainer}>
-        <SearchBar></SearchBar>
+        <SearchBar />
         <Box>
           <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              console.log(profile);
               return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
             })}
           </Box>
