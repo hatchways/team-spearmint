@@ -4,6 +4,7 @@ const protect = require('../middleware/auth');
 const {
   editProfile,
   loadProfile,
+  uploadProfilePhoto
 } = require('../controllers/profile');
 
 router.route('/edit').put(protect, editProfile);
