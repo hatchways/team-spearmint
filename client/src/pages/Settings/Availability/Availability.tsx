@@ -42,6 +42,7 @@ interface schedule {
   friday: Day;
   saturday: Day;
   sunday: Day;
+  _id: string;
 }
 
 const daysOfTheWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -76,14 +77,12 @@ const times = [
 export default function Availability({ header }: Props): JSX.Element {
   const { updateSnackBarMessage } = useSnackBar();
   const classes = useStyles();
-  const [schedules, setSchedules] = useState<any[]>([]);
+  const [schedules, setSchedules] = useState<schedule[]>([]);
   const [schedule, setSchedule] = useState<schedule>();
   const [showActive, setShowActive] = useState(false);
   const [newSchedule, setNewSchedule] = useState(false);
   const [newScheduleCreated, setNewScheduleCreated] = useState(false);
   const [newScheduleId, setNewScheduleId] = useState<string>('');
-
-  console.log(schedules);
 
   useEffect(() => {
     const sanitizeSchedules = (schedules: any) => {
@@ -160,7 +159,6 @@ export default function Availability({ header }: Props): JSX.Element {
   };
 
   const handleScheduleClick = (e: any, index: number) => {
-    console.log(index);
     setSchedule(schedules[index]);
     setShowActive(false);
   };
@@ -170,7 +168,13 @@ export default function Availability({ header }: Props): JSX.Element {
     console.log(e);
   };
 
-  console.log(schedule);
+  const initialDayProps = {
+    active: initialDayValues.active,
+    startTime: initialDayValues.startTime,
+    endTime: initialDayValues.endTime,
+  };
+  console.log(initialDayProps);
+  console.log(initialDayValues);
   return (
     <div>
       <Box
@@ -203,7 +207,7 @@ export default function Availability({ header }: Props): JSX.Element {
             </Select>
           </FormControl>
           <Button
-            onClick={() => handleNewSchedule()}
+            onClick={handleNewSchedule}
             sx={{ borderRadius: '10%', color: 'green', border: 'solid 2px green' }}
             className={classes.addSchedule}
           >
@@ -223,41 +227,13 @@ export default function Availability({ header }: Props): JSX.Element {
             <Formik
               initialValues={{
                 name: '',
-                monday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                tuesday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                wednesday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                thursday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                friday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                saturday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
-                sunday: {
-                  active: initialDayValues.active,
-                  startTime: initialDayValues.startTime,
-                  endTime: initialDayValues.endTime,
-                },
+                monday: initialDayProps,
+                tuesday: initialDayProps,
+                wednesday: initialDayProps,
+                thursday: initialDayProps,
+                friday: initialDayProps,
+                saturday: initialDayProps,
+                sunday: initialDayProps,
               }}
               onSubmit={handleNewSubmit}
             >

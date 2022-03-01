@@ -83,7 +83,7 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
     if (val) return { disabled: true };
     return {};
   };
-
+  console.log(values);
   return (
     <Box
       className={classes.timeContainer}

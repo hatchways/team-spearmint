@@ -50,7 +50,7 @@ export default function ScheduleForm({ schedule, handleEditSchedule, showActive,
               value={values.name}
               onChange={handleChange}
             />
-            {showActive && <StarIcon></StarIcon>}
+            {showActive && <StarIcon />}
             {daysOfTheWeek.map((day) => {
               return (
                 <DayOfWeekInput values={values} setFieldValue={setFieldValue} key={day} day={day}></DayOfWeekInput>
@@ -58,10 +58,7 @@ export default function ScheduleForm({ schedule, handleEditSchedule, showActive,
             })}
             <Box display="flex" flexDirection="row" justifyContent="center" height="100%">
               <Button onClick={() => handleMakeActiveSchedule(values)}>
-                Make Active <StarIcon></StarIcon>
-              </Button>
-              <Button>
-                Delete Schedule <DeleteIcon></DeleteIcon>
+                Make Active <StarIcon />
               </Button>
             </Box>
           </form>
