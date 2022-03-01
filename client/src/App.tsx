@@ -18,7 +18,6 @@ import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
 
-
 function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>

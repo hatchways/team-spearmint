@@ -72,7 +72,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     const profile = await Profile.findOne({ userId: user.id})
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
-    const profile = await Profile.findOne(user._id);
 
     res.cookie("token", token, {
       httpOnly: true,
