@@ -1,21 +1,27 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
+import { RequestApiData } from '../interface/RequestApiData';
 import { User } from '../interface/User';
 import loginWithCookies from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
+import getSitterRequests from '../helpers/APICalls/sitterRequests';
 
 interface IAuthContext {
   profile: any;
   loggedInUser: User | null | undefined;
+  sitterRequests: any;
   updateLoginContext: (data: AuthApiDataSuccess) => void;
+  updateSitterRequestsContext: (data: any) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
   profile: undefined,
   loggedInUser: undefined,
+  sitterRequests: undefined,
   updateLoginContext: () => null,
+  updateSitterRequestsContext: () => null,
   logout: () => null,
 });
 
@@ -23,6 +29,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   // default undefined before loading, once loaded provide user or null if logged out
   const [loggedInUser, setLoggedInUser] = useState<User | null | undefined>();
   const [profile, setProfile] = useState();
+  const [sitterRequests, setSitterRequests] = useState<Array<RequestApiData> | null | undefined>();
   const history = useHistory();
 
   const updateLoginContext = useCallback(
@@ -35,6 +42,10 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
     },
     [history],
   );
+
+  const updateSitterRequestsContext = useCallback((data: Array<RequestApiData>) => {
+    setSitterRequests(data);
+  }, []);
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
@@ -56,8 +67,8 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
         } else {
           // don't need to provide error feedback as this just means user doesn't have saved cookies or the cookies have not been authenticated on the backend
           setLoggedInUser(null);
-          if (!(history.location.pathname === '/signup')) {
-            history.push('/login');
+          if (!(history.location.pathname === '/signup' || history.location.pathname === '/login')) {
+            history.push('/');
           }
         }
       });
@@ -66,7 +77,9 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   }, [updateLoginContext, history]);
 
   return (
-    <AuthContext.Provider value={{ loggedInUser, profile, updateLoginContext, logout }}>
+    <AuthContext.Provider
+      value={{ loggedInUser, profile, sitterRequests, updateLoginContext, updateSitterRequestsContext, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
