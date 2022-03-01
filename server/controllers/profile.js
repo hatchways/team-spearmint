@@ -26,11 +26,11 @@ exports.editProfile = asyncHandler(async (req, res, next) => {
 // @desc Get user profile data
 // @access Private
 exports.loadProfile = asyncHandler(async (req, res, next) => {
-  const profile = await User.findById(req.user.id, "profile");
-
+  const profile = await Profile.findOne({ userId: req.user.id });
+  
   if (!profile) {
     res.status(401);
-    throw new Error("Not authorized");
+    throw new Error("Profile not found!");
   }
 
   res.status(200).json({
@@ -38,4 +38,14 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
       profile: profile,
     },
   });
+});
+
+// @route GET /profiles  
+// @desc Get user profiles
+// @access Public
+
+exports.loadProfiles = asyncHandler(async (req, res, next) => {
+  const pet_sitters = await Profile.find({ accountType: 'pet_sitter', address: { $exists: true }, price: { $exists: true }})
+    
+    res.status(200).send({ profiles: pet_sitters})
 });
