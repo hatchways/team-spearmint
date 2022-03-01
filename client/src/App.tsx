@@ -14,12 +14,9 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
-
 import Profiles from './pages/Profiles/Profiles';
-
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 
 
 
