@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   uploadInput: {
     display: 'none',
   },
+  upload: {
+    display: 'none',
+  },
 }));
 
 export default useStyles;
