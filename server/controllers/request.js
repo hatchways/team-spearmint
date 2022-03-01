@@ -4,7 +4,6 @@ const Request = require("../models/Request");
 
 exports.createRequest = async (req, res) => {
     const { ownerId, sitterId, start, end, animalType, usefulInfo } = req.body;
-    console.log(req.body);
     try {
         const ownerExists = await User.findOne({ ownerId });
         if (!ownerExists) return res.status(404).json({ message: "Owner doesn't exist" });

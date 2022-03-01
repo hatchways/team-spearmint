@@ -26,12 +26,12 @@ export default function ProfileDetails(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
   const { loggedInUser } = useAuth();
-  const [profile, setProfile] = useState<any>();
+  const [profile, setProfile] = useState<Profile>();
   const { sitterId } = useParams<{ sitterId: string }>();
 
   useEffect(() => {
     const takeProfile = async () => {
-      await loadProfile(sitterId).then((data: any) => {
+      loadProfile(sitterId).then((data: any) => {
         if (data.error) {
           console.error({ error: data.error.message });
         } else if (data) {
