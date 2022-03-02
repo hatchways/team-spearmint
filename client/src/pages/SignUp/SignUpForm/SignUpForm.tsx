@@ -5,6 +5,11 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
 import FormInput from '../../../components/FormInput/FormInput';
+import { useAuth } from '../../../context/useAuthContext';
+import login from '../../../helpers/APICalls/login';
+import { useSnackBar } from '../../../context/useSnackbarContext';
+import { demoUserCredential } from '../../../helpers/DemoUserCredential/DemoUserCredential';
+import DemoButton from '../../../components/DemoButton/DemoButton';
 
 interface Props {
   handleSubmit: (
@@ -30,6 +35,8 @@ interface Props {
 
 const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
   const classes = useStyles();
+  const { updateLoginContext } = useAuth();
+  const { updateSnackBarMessage } = useSnackBar();
 
   return (
     <Formik
@@ -93,7 +100,8 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
             onChange={handleChange}
           />
 
-          <Box textAlign="center" marginTop={5}>
+          <Box display="flex" alignItems="center" justifyContent="space-around" marginTop={5}>
+            <DemoButton />
             <Button
               type="submit"
               size="large"

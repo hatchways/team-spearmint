@@ -4,6 +4,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './themes/theme';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Landing from './pages/Landing/Landing';
 import Login from './pages/Login/Login';
 import Signup from './pages/SignUp/SignUp';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -13,6 +14,11 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
+import Profiles from './pages/Profiles/Profiles';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import ManageBookings from './pages/ManageBookings/ManageBookings';
+
+
 
 function App(): JSX.Element {
   return (
@@ -24,10 +30,13 @@ function App(): JSX.Element {
               <CssBaseline />
               <Navbar />
               <Switch>
+                <Route exact path="/" component={Landing} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/dashboard" component={Dashboard} />
+                <Route exact path="/profiles" component={Profiles} />
                 <Route path="/profile/settings" component={Settings} />
+                <Route exact path="/manage-bookings" component={ManageBookings} />
                 <Route path="*">
                   <NotFound />
                 </Route>

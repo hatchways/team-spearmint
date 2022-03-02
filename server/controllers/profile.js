@@ -39,3 +39,13 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+// @route GET /profiles  
+// @desc Get user profiles
+// @access Public
+
+exports.loadProfiles = asyncHandler(async (req, res, next) => {
+  const pet_sitters = await Profile.find({ accountType: 'pet_sitter', address: { $exists: true }, price: { $exists: true }})
+    
+    res.status(200).send({ profiles: pet_sitters})
+});

@@ -40,7 +40,15 @@ const profileSchema = new mongoose.Schema({
   }, 
   customerId: {
     type: String
+  },
+  price: {
+    type: Number,
+    default: 15
+  },
+  caption: {
+    type: String,
+    default: 'Professional Dog Trainer'
   }
 });
 
-module.exports = Profile = mongoose.model("Profile", profileSchema);
+module.exports = Profile = mongoose.model("profile", profileSchema);
