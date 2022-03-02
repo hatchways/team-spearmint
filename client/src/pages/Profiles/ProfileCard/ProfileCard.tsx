@@ -1,6 +1,6 @@
 import { Typography, Box, Card, Rating, Divider } from '@mui/material';
 import useStyles from './useStyles';
-import StarIcon from '@mui/icons-material/Star';
+
 export default function ProfileCard({ profile }: any) {
   const classes = useStyles();
   const rating = 4;
