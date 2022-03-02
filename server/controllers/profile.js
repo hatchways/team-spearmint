@@ -2,6 +2,7 @@
    
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
+const { ResultWithContext } = require("express-validator/src/chain");
 
 // @route PUT /profile/edit
 // @desc edit user profile
@@ -40,13 +41,19 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @route GET /profiles/sitters
+// @route GET /profiles/sitters?location=address&dates=date-range
 // @desc Get user profiles
 // @access Public
 
 exports.loadProfiles = asyncHandler(async (req, res, next) => {
-  const petSitters = await Profile.find({ accountType: 'pet_sitter', address: { $exists: true }, price: { $exists: true } })
-    
+  let petSitters = await Profile.find({ accountType: 'pet_sitter', address: { $exists: true }, price: { $exists: true } })
+
+  if (req.query.location !== 'undefined') {
+    petSitters = petSitters.filter((sitter) => sitter.address.includes(req.query.location))
+  } else if (req.query.dates !== 'undefined') {
+
+  }
+
   res.status(200).send({ profiles: petSitters})
 });
 
