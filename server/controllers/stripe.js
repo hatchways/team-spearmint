@@ -14,7 +14,7 @@ const createCustomer = async(profile, email) => {
   } else {
     profile.customerId = customer.id
 
-    let savedProfile = await profile.save()
+    const savedProfile = await profile.save()
     if(!savedProfile){
       throw new Error("Profile could not be updated with stripe customer Id")
     } else {
