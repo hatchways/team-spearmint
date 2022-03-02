@@ -38,6 +38,9 @@ const profileSchema = new mongoose.Schema({
     type: String, 
     enum: ["pet_sitter", "pet_owner"]
   }, 
+  customerId: {
+    type: String
+  },
   price: {
     type: Number,
     default: 15
