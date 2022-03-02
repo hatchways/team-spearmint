@@ -6,17 +6,18 @@ import { getProfiles } from '../../helpers/APICalls/getProfiles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
 import SearchBar from './SearchBar/SearchBar';
-
+import { Profile } from '../../interface/Profile';
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
 
-  const [profiles, setProfiles] = useState<any[]>([]);
-  const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [searchLocation, setSearchLocation] = useState<string>();
+  const [searchDate, setSearchDate] = useState<string>();
 
   useEffect(() => {
     const loadProfiles = async () => {
-      const profiles = await getProfiles();
+      const profiles = await getProfiles(searchLocation, searchDate);
 
       if (profiles) {
         setProfiles(profiles.profiles);
@@ -24,9 +25,10 @@ export default function Profiles() {
         updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
       }
     };
-
-    loadProfiles().catch((error) => updateSnackBarMessage(error));
-  }, [updateSnackBarMessage]);
+    if (!searchLocation && !searchDate) {
+      loadProfiles().catch((error) => updateSnackBarMessage(error));
+    }
+  }, [updateSnackBarMessage, searchLocation, searchDate]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
@@ -41,30 +43,11 @@ export default function Profiles() {
     }
   };
 
-  const [searchLocation, setSearchLocation] = useState<string>();
-  const [searchDate, setSearchDate] = useState<string>();
-
-  const handleSearchClick = () => {
-    if (searchLocation && searchDate) {
-      const filteredProfiles = filterProfiles(searchLocation, searchDate);
-    } else if (searchLocation) {
-      const filteredProfiles = filterProfiles(searchLocation, undefined);
-      setFilteredProfiles(filteredProfiles);
-      console.log(profiles);
-    } else if (searchDate) {
-      const filteredProfiles = filterProfiles(undefined, searchDate);
-    }
+  const handleSearchClick = async () => {
+    const profiles = await getProfiles(searchLocation, searchDate);
+    console.log(profiles);
+    setProfiles(profiles.profiles);
   };
-
-  const filterProfiles = (location: string | undefined, date: string | undefined) => {
-    return profiles.filter((profile) => profile.address.includes(location));
-  };
-
-  useEffect(() => {
-    if (!searchLocation) {
-      setFilteredProfiles([]);
-    }
-  }, [searchLocation, searchDate]);
 
   return (
     <>
@@ -76,34 +59,18 @@ export default function Profiles() {
           setSearchDate={setSearchDate}
           handleSearchClick={handleSearchClick}
         ></SearchBar>
-        {filteredProfiles.length === 0 && (
-          <Box>
-            <Box className={classes.innerFlexRowContainer}>
-              {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-              })}
-            </Box>
-            <Box className={classes.innerFlexRowContainer}>
-              {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-              })}
-            </Box>
+        <Box>
+          <Box className={classes.innerFlexRowContainer}>
+            {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
+              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+            })}
           </Box>
-        )}
-        {filteredProfiles.length > 0 && (
-          <Box>
-            <Box className={classes.innerFlexRowContainer}>
-              {filteredProfiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-              })}
-            </Box>
-            <Box className={classes.innerFlexRowContainer}>
-              {filteredProfiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-              })}
-            </Box>
+          <Box className={classes.innerFlexRowContainer}>
+            {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
+              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+            })}
           </Box>
-        )}
+        </Box>
         <Button
           onClick={() => showMoreProfiles()}
           size="large"

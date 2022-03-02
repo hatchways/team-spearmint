@@ -4,9 +4,8 @@ import StarIcon from '@mui/icons-material/Star';
 export default function ProfileCard({ profile }: any) {
   const classes = useStyles();
   const rating = 4;
-  const rates = ['$15', '$20', '$25', '$30'];
   const sanitizeDescription = (description: string) => {
-    return description.slice(0, 60);
+    return description.slice(0, 50);
   };
   return (
     <>
@@ -20,7 +19,7 @@ export default function ProfileCard({ profile }: any) {
         >
           <img alt="Profile picture" className={classes.profilePic} src={profile.photo}></img>
           <Typography variant="h6">{profile.name}</Typography>
-          <Typography variant="subtitle2">{profile.blurb}</Typography>
+          <Typography variant="subtitle2">{profile.caption}</Typography>
           <Typography variant="subtitle2">
             <Rating name="read-only" value={rating} readOnly />
           </Typography>
@@ -38,7 +37,7 @@ export default function ProfileCard({ profile }: any) {
             <Typography variant="subtitle2" sx={{ marginRight: '60px !important' }}>
               {profile.address}
             </Typography>
-            <Typography variant="subtitle2">{rates[3]}/hr</Typography>
+            <Typography variant="subtitle2">{profile.price}/hr</Typography>
           </Box>
         </Box>
       </Card>

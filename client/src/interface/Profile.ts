@@ -8,5 +8,7 @@ export interface Profile {
   birthday: Date;
   photo: string;
   accountType: string;
+  price: number;
+  caption: string;
   _id: string;
 }
