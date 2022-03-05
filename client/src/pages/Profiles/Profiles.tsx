@@ -6,11 +6,13 @@ import { getProfiles } from '../../helpers/APICalls/getProfiles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
 import SearchBar from './SearchBar/SearchBar';
+import { useSitterSearch } from '../../context/useSitterSearchContext';
 
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
-
+  const { location, start, end } = useSitterSearch();
+  console.log(location, start, end);
   const [profiles, setProfiles] = useState<any[]>([]);
 
   useEffect(() => {
@@ -23,7 +25,6 @@ export default function Profiles() {
         updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
       }
     };
-
     loadProfiles().catch((error) => updateSnackBarMessage(error));
   }, [updateSnackBarMessage]);
 
