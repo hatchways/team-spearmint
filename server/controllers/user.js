@@ -2,7 +2,7 @@ const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 
 // @route POST /users
-// @desc Search for users
+// @desc search for users
 // @access Private
 exports.searchUsers = asyncHandler(async (req, res, next) => {
   const searchString = req.query.search;

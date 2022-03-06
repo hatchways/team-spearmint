@@ -11,14 +11,14 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
+import { SitterSearchProvider } from './context/useSitterSearchContext';
+
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
 import Profiles from './pages/Profiles/Profiles';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
-
-
 
 function App(): JSX.Element {
   return (
@@ -27,20 +27,22 @@ function App(): JSX.Element {
         <SnackBarProvider>
           <AuthProvider>
             <SocketProvider>
-              <CssBaseline />
-              <Navbar />
-              <Switch>
-                <Route exact path="/" component={Landing} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/profiles" component={Profiles} />
-                <Route path="/profile/settings" component={Settings} />
-                <Route exact path="/manage-bookings" component={ManageBookings} />
-                <Route path="*">
-                  <NotFound />
-                </Route>
-              </Switch>
+              <SitterSearchProvider>
+                <CssBaseline />
+                <Navbar />
+                <Switch>
+                  <Route exact path="/" component={Landing} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
+                  <Route exact path="/dashboard" component={Dashboard} />
+                  <Route exact path="/profiles" component={Profiles} />
+                  <Route path="/profile/settings" component={Settings} />
+                  <Route exact path="/manage-bookings" component={ManageBookings} />
+                  <Route path="*">
+                    <NotFound />
+                  </Route>
+                </Switch>
+              </SitterSearchProvider>
             </SocketProvider>
           </AuthProvider>
         </SnackBarProvider>

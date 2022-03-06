@@ -15,6 +15,8 @@ const profileRouter = require('./routes/profile');
 const availabilityRouter = require('./routes/availability');
 const requestRouter = require("./routes/request");
 const uploadRouter = require('./routes/upload');
+const paymentRouter = require('./routes/payments');
+
 
 
 const { json, urlencoded } = express;
@@ -52,6 +54,7 @@ app.use("/profile", profileRouter);
 app.use("/availability", availabilityRouter)
 app.use("/requests", requestRouter);
 app.use(uploadRouter);
+app.use("/payment", paymentRouter);
 
 
 

@@ -7,10 +7,13 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
 import SearchBar from './SearchBar/SearchBar';
 import { Profile } from '../../interface/Profile';
+import { useSitterSearch } from '../../context/useSitterSearchContext';
+
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
-
+  const { location, start, end } = useSitterSearch();
+  console.log(location, start, end);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchLocation, setSearchLocation] = useState<string>();
   const [searchDate, setSearchDate] = useState<string>();
