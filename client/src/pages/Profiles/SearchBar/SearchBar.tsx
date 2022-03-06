@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box } from '@mui/material';
+import { TextField, Typography, Box } from '@mui/material';
 import useStyles from './useStyles';
 import { useState } from 'react';
 
@@ -20,7 +20,7 @@ export default function SearchBar({
 
   return (
     <>
-      <Typography sx={{ marginTop: '30px !important', fontWeight: 'bold !important' }} variant="h5">
+      <Typography sx={{ marginTop: '30px', fontWeight: 'bold' }} variant="h5">
         Your Search Results
       </Typography>
       <Box className={classes.flexRowContainer}>
