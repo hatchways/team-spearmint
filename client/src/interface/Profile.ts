@@ -7,6 +7,6 @@ export interface Profile {
   telephone: string;
   birthday: Date;
   photo: string;
-  accountType: ['pet_sitter', 'pet_owner'];
+  accountType: string;
   _id: string;
 }
