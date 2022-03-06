@@ -6,16 +6,18 @@ import { getProfiles } from '../../helpers/APICalls/getProfiles';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
 import SearchBar from './SearchBar/SearchBar';
-
+import { Profile } from '../../interface/Profile';
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
 
-  const [profiles, setProfiles] = useState<any[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [searchLocation, setSearchLocation] = useState<string>();
+  const [searchDate, setSearchDate] = useState<string>();
 
   useEffect(() => {
     const loadProfiles = async () => {
-      const profiles = await getProfiles();
+      const profiles = await getProfiles(searchLocation, searchDate);
 
       if (profiles) {
         setProfiles(profiles.profiles);
@@ -23,9 +25,10 @@ export default function Profiles() {
         updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
       }
     };
-
-    loadProfiles().catch((error) => updateSnackBarMessage(error));
-  }, [updateSnackBarMessage]);
+    if (!searchLocation && !searchDate) {
+      loadProfiles().catch((error) => updateSnackBarMessage(error));
+    }
+  }, [updateSnackBarMessage, searchLocation, searchDate]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
@@ -39,11 +42,23 @@ export default function Profiles() {
       setCurrentIndicesBottomRow(currentIndicesBottomRow + 6);
     }
   };
-  console.log(profiles);
+
+  const handleSearchClick = async () => {
+    const profiles = await getProfiles(searchLocation, searchDate);
+    console.log(profiles);
+    setProfiles(profiles.profiles);
+  };
+
   return (
     <>
       <Box className={classes.flexContainer}>
-        <SearchBar />
+        <SearchBar
+          searchLocation={searchLocation}
+          setSearchLocation={setSearchLocation}
+          searchDate={searchDate}
+          setSearchDate={setSearchDate}
+          handleSearchClick={handleSearchClick}
+        ></SearchBar>
         <Box>
           <Box className={classes.innerFlexRowContainer}>
             {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
@@ -56,7 +71,6 @@ export default function Profiles() {
             })}
           </Box>
         </Box>
-
         <Button
           onClick={() => showMoreProfiles()}
           size="large"
