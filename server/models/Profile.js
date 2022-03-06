@@ -39,6 +39,10 @@ const profileSchema = new mongoose.Schema({
     enum: ["pet_sitter", "pet_owner"],
     default: "pet_owner",
   }, 
+  customerId: {
+    type: String
+  },
+
   price: {
     type: Number,
     default: 15
@@ -62,3 +66,4 @@ const profileSchema = new mongoose.Schema({
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);
+

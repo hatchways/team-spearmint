@@ -15,8 +15,10 @@ import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
 import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
+import Profiles from './pages/Profiles/Profiles';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
+
 
 function App(): JSX.Element {
   return (
@@ -32,6 +34,7 @@ function App(): JSX.Element {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/dashboard" component={Dashboard} />
+                <Route exact path="/profiles" component={Profiles} />
                 <Route path="/profile/settings" component={Settings} />
                 <Route path="/profile-details/:sitterId" component={ProfileDetails} />
                 <Route exact path="/manage-bookings" component={ManageBookings} />
