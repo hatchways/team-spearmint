@@ -13,14 +13,13 @@ export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
   const { location, start, end } = useSitterSearch();
-  console.log(location, start, end);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchLocation, setSearchLocation] = useState<string>();
   const [searchDate, setSearchDate] = useState<string>();
 
   useEffect(() => {
     const loadProfiles = async () => {
-      const profiles = await getProfiles(searchLocation, searchDate);
+      const profiles = await getProfiles(location!, start!.toString());
 
       if (profiles) {
         setProfiles(profiles.profiles);
@@ -28,10 +27,10 @@ export default function Profiles() {
         updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
       }
     };
-    if (!searchLocation && !searchDate) {
+    if (!searchLocation && !searchDate && location && start) {
       loadProfiles().catch((error) => updateSnackBarMessage(error));
     }
-  }, [updateSnackBarMessage, searchLocation, searchDate]);
+  }, [updateSnackBarMessage, searchLocation, searchDate, location, start]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
