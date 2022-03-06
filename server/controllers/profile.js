@@ -27,8 +27,9 @@ exports.editProfile = asyncHandler(async (req, res, next) => {
 // @desc Get user profile data
 // @access Private
 exports.loadProfile = asyncHandler(async (req, res, next) => {
-  const profile = await Profile.findOne({ userId: req.user.id });
 
+  const { id } = req.params;
+  const profile = await Profile.findOne({ userId: id });
   if (!profile) {
     res.status(401);
     throw new Error("Profile not found!");
@@ -37,7 +38,7 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: {
       profile: profile,
-    },
+    }  
   });
 });
 

@@ -27,7 +27,6 @@ const requestSchema = new mongoose.Schema(
         animalType: {
             type: String,
             enum: ["dog", "cat", "other"],
-            required: true,
         },
         usefulInfo: {
             type: String,
