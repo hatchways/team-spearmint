@@ -134,7 +134,6 @@ const Navbar: React.FC = () => {
   const renderMenuItems = () => {
     return menuItems.map((menu) => {
       if (menu.authenticated && menu.canView?.includes(profile?.accountType || '')) {
-
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
         if (!menu.authenticated) {

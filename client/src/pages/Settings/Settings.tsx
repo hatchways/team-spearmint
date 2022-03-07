@@ -8,8 +8,12 @@ import SettingsWrapper from '../../components/SettingsWrapper/SettingsWrapper';
 import EditProfile from './EditProfile/EditProfile';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
 import ProfilePhoto from './ProfilePhoto/ProfilePhoto';
+
+import Availability from './Availability/Availability';
+
 import StripeContainer from '../../components/Stripe/StripeContainer';
 import Payment from './Payment/Payment';
+
 
 const settingsMenu = [
   {
@@ -25,7 +29,7 @@ const settingsMenu = [
   {
     name: 'Availability',
     to: '/profile/settings/availability',
-    component: <SettingHeader header="Availability" />,
+    component: <Availability header="Availability" />,
   },
   {
     name: 'Payment methods',
