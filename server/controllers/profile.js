@@ -28,17 +28,13 @@ exports.editProfile = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.loadProfile = asyncHandler(async (req, res, next) => {
   const profile = await Profile.findOne({ userId: req.user.id });
-
+  
   if (!profile) {
     res.status(401);
     throw new Error("Profile not found!");
   }
 
-  res.status(200).json({
-    success: {
-      profile: profile,
-    },
-  });
+  res.status(200).send(profile)
 });
 
 const daysOfTheWeek = {
@@ -77,7 +73,7 @@ exports.loadProfiles = asyncHandler(async (req, res, next) => {
       availableProfiles.forEach((profileId) => {
         if (JSON.stringify(sitter._id) === profileId) {
           available = true
-        } 
+        }
       })
       return available
     })
