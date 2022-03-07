@@ -23,7 +23,6 @@ import loadProfile from '../../helpers/APICalls/loadProfile';
 import { Profile } from '../../interface/Profile';
 import { useSnackBar } from '../../context/useSnackbarContext';
 
-
 const Navbar: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
@@ -126,11 +125,15 @@ const Navbar: React.FC = () => {
     handleClose();
     logout();
   };
-  const [profile, setProfile] = useState<Profile>();
+
+  interface AccountType {
+    accountType: string;
+  }
+  const [profile, setProfile] = useState<AccountType>({ accountType: 'initial' });
 
   const renderMenuItems = () => {
     return menuItems.map((menu) => {
-      if (menu.authenticated) {
+      if (menu.authenticated && menu.canView?.includes(profile?.accountType || '')) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
         if (!menu.authenticated) {

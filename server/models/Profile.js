@@ -36,11 +36,13 @@ const profileSchema = new mongoose.Schema({
   },
   accountType: {
     type: String, 
-    enum: ["pet_sitter", "pet_owner"]
+    enum: ["pet_sitter", "pet_owner"],
+    default: "pet_owner",
   }, 
   customerId: {
     type: String
   },
+
   price: {
     type: Number,
     default: 15
@@ -48,7 +50,20 @@ const profileSchema = new mongoose.Schema({
   caption: {
     type: String,
     default: 'Professional Dog Trainer'
-  }
+  },
+  coverPicture: {
+    type: String,
+    default: "https://book.gettimely.com/images/default-cover-image.jpg",
+  },
+  rate: {
+    type: Number,
+    default: 5,
+  },
+  gallery: {
+    type: [String],
+    default: [],
+  },
 });
 
-module.exports = Profile = mongoose.model("profile", profileSchema);
+module.exports = Profile = mongoose.model("Profile", profileSchema);
+
