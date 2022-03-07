@@ -5,8 +5,6 @@ import { Profile } from '../../interface/Profile';
 const loadProfile = async (id: string | undefined): Promise<Profile> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(id),
     credentials: 'include',
   };
   return await fetch(`/profile/load`, fetchOptions)

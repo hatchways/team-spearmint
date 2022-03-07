@@ -34,7 +34,10 @@ export default function ManageBookings(): JSX.Element {
 
   useEffect(() => {
     if (loggedInUser) {
-      getSitterRequests(loggedInUser.id).then((res) => updateSitterRequestsContext(res));
+      getSitterRequests(loggedInUser.id).then((res) => {
+        console.log(res);
+        updateSitterRequestsContext(res);
+      });
     }
   }, [loggedInUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -43,7 +46,7 @@ export default function ManageBookings(): JSX.Element {
     history.push('/login');
     return <CircularProgress />;
   }
-
+  console.log(sitterRequests);
   let pastRequests;
   let currentRequests;
   let nextRequest;
