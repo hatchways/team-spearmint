@@ -5,7 +5,7 @@ export default function ProfileCard({ profile }: any) {
   const classes = useStyles();
   const rating = 4;
   const sanitizeDescription = (description: string) => {
-    return description.slice(0, 50);
+    return description.slice(0, 40);
   };
   return (
     <>

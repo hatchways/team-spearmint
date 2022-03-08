@@ -18,23 +18,29 @@ export default function Profiles() {
   const [searchDate, setSearchDate] = useState<string>();
 
   useEffect(() => {
-    const loadProfiles = async () => {
-      const profiles = await getProfiles(location!, start!.toString());
-
-      if (profiles) {
-        setProfiles(profiles.profiles);
-      } else {
-        updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
-      }
+    const initialLoad = async () => {
+      const startString = start ? start.toString() : null;
+      const profiles = await getProfiles(location, startString);
+      if (profiles) setProfiles(profiles.profiles);
+      else updateSnackBarMessage('No profiles found!');
     };
-    if (!searchLocation && !searchDate && location && start) {
-      loadProfiles().catch((error) => updateSnackBarMessage(error));
-    }
-  }, [updateSnackBarMessage, searchLocation, searchDate, location, start]);
+    initialLoad().catch((error) => updateSnackBarMessage(error));
+  }, [location, start, updateSnackBarMessage]);
+
+  // useEffect(() => {
+  //   if (!searchLocation && !searchDate) {
+  //     const loadAllProfiles = async () => {
+  //       const profiles = await getProfiles(undefined, undefined);
+  //       if (profiles) setProfiles(profiles.profiles);
+  //     };
+  //     loadAllProfiles();
+  //   }
+  // }, [searchLocation, searchDate]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
-
+  console.log(profiles);
+  console.log(location, start);
   const showMoreProfiles = () => {
     if (currentIndicesTopRow + 3 > profiles.length - 1) {
       setCurrentIndicesTopRow(3);
@@ -47,7 +53,6 @@ export default function Profiles() {
 
   const handleSearchClick = async () => {
     const profiles = await getProfiles(searchLocation, searchDate);
-    console.log(profiles);
     setProfiles(profiles.profiles);
   };
 
@@ -63,14 +68,16 @@ export default function Profiles() {
         ></SearchBar>
         <Box>
           <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+            {profiles &&
+              profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
           </Box>
           <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+            {profiles &&
+              profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
           </Box>
         </Box>
         <Button

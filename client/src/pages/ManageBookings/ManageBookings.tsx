@@ -45,7 +45,7 @@ export default function ManageBookings(): JSX.Element {
     history.push('/login');
     return <CircularProgress />;
   }
-  
+
   let pastRequests;
   let currentRequests;
   let nextRequest;

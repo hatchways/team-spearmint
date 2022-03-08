@@ -1,6 +1,6 @@
 import { FetchOptions } from '../../interface/FetchOptions';
 
-export async function getProfiles(location: string | undefined, dates: string | undefined) {
+export async function getProfiles(location: string | undefined | null, dates: string | undefined | null) {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
