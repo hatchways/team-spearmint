@@ -62,16 +62,18 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
       upload();
     }
   }, [profilePhoto, currentUser, updateSnackBarMessage]);
-
+  console.log(currentProfile);
   return (
     <>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100%">
         <SettingHeader header={header} />
-        <img
-          alt={'Profile Photo'}
-          className={classes.profilePhoto}
-          src={!profilePhoto ? currentProfile?.photo : URL.createObjectURL(profilePhoto)}
-        ></img>
+        {profilePhoto !== null && (
+          <img
+            alt={'Profile Photo'}
+            className={classes.profilePhoto}
+            src={!profilePhoto ? currentProfile?.photo : URL.createObjectURL(profilePhoto)}
+          ></img>
+        )}
         <Typography variant="h6" className={classes.picText}>
           Be sure to use a photo that clearly shows your face
         </Typography>
@@ -90,6 +92,7 @@ export default function ProfilePhoto({ header, currentUser, currentProfile }: Pr
             Upload a file from your device
           </Button>
         </Box>
+        <br />
         <Button variant="text" onClick={() => handleDelete()} className={classes.deleteText}>
           Delete Photo <DeleteIcon></DeleteIcon>
         </Button>

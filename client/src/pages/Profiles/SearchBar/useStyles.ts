@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 400,
+    width: 500,
     marginBottom: 30,
     marginTop: 20,
   },
