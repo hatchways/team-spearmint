@@ -16,9 +16,10 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     width: 400,
     marginBottom: 30,
+    marginTop: 20,
   },
   date: {
-    width: 250,
+    width: 100,
   },
   searchButton: {
     height: 52,

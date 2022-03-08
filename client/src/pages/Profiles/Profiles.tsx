@@ -15,7 +15,8 @@ export default function Profiles() {
   const { location, start, end } = useSitterSearch();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchLocation, setSearchLocation] = useState<string>();
-  const [searchDate, setSearchDate] = useState<string>();
+  const [searchStartDate, setSearchStartDate] = useState<string>();
+  const [searchEndDate, setSearchEndDate] = useState<string>();
 
   useEffect(() => {
     const initialLoad = async () => {
@@ -44,7 +45,7 @@ export default function Profiles() {
   };
 
   const handleSearchClick = async () => {
-    const profiles = await getProfiles(searchLocation, searchDate, searchDate);
+    const profiles = await getProfiles(searchLocation, searchStartDate, searchEndDate);
     setProfiles(profiles.profiles);
   };
 
@@ -54,8 +55,10 @@ export default function Profiles() {
         <SearchBar
           searchLocation={searchLocation}
           setSearchLocation={setSearchLocation}
-          searchDate={searchDate}
-          setSearchDate={setSearchDate}
+          searchStartDate={searchStartDate}
+          setSearchStartDate={setSearchStartDate}
+          searchEndDate={searchEndDate}
+          setSearchEndDate={setSearchEndDate}
           handleSearchClick={handleSearchClick}
         ></SearchBar>
         <Box>
