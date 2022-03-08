@@ -20,22 +20,14 @@ export default function Profiles() {
   useEffect(() => {
     const initialLoad = async () => {
       const startString = start ? start.toString() : null;
-      const profiles = await getProfiles(location, startString);
+      const endString = end ? end.toString() : null;
+      console.log(startString, endString);
+      const profiles = await getProfiles(location, startString, endString);
       if (profiles) setProfiles(profiles.profiles);
       else updateSnackBarMessage('No profiles found!');
     };
     initialLoad().catch((error) => updateSnackBarMessage(error));
-  }, [location, start, updateSnackBarMessage]);
-
-  // useEffect(() => {
-  //   if (!searchLocation && !searchDate) {
-  //     const loadAllProfiles = async () => {
-  //       const profiles = await getProfiles(undefined, undefined);
-  //       if (profiles) setProfiles(profiles.profiles);
-  //     };
-  //     loadAllProfiles();
-  //   }
-  // }, [searchLocation, searchDate]);
+  }, [location, start, end, updateSnackBarMessage]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
@@ -52,7 +44,7 @@ export default function Profiles() {
   };
 
   const handleSearchClick = async () => {
-    const profiles = await getProfiles(searchLocation, searchDate);
+    const profiles = await getProfiles(searchLocation, searchDate, searchDate);
     setProfiles(profiles.profiles);
   };
 
