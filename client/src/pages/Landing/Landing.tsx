@@ -4,15 +4,21 @@ import LandingPageHeader from '../../components/LandingPageHeader/LandingPageHea
 import LandingForm from './LandingForm/LandingForm';
 import { FormikHelpers } from 'formik';
 import useStyles from './useStyles';
+import { useSitterSearch } from '../../context/useSitterSearchContext';
+import { useHistory } from 'react-router';
 
 export default function Landing(): JSX.Element {
+  const history = useHistory();
   const classes = useStyles();
+  const { updateSitterSearchInfo } = useSitterSearch();
 
   const handleSubmit = (
     { location, start, end }: { location: string; start: Date; end: Date },
     { setSubmitting }: FormikHelpers<{ location: string; start: Date; end: Date }>,
   ) => {
-    alert(`location: ${location} - start: ${start} - end: ${end}`);
+    // alert(`location: ${location} - start: ${start} - end: ${end}`);
+    updateSitterSearchInfo(location, start, end);
+    history.push('/profiles');
   };
 
   return (
