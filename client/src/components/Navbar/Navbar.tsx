@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useAuth } from '../../context/useAuthContext';
 import {
@@ -10,93 +10,108 @@ import {
   ListItemText,
   Menu,
   MenuItem as DropdownMenuItem,
+  menuItemClasses,
   styled,
 } from '@mui/material';
 import { AccountType } from '../../types/AccountType';
 
 import lovingSitterLogo from '../../images/logo.svg';
 import { useStyles } from './useStyles';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
-
-const NavbarButton = styled(Button)({
-  padding: '15px 0',
-});
-
-const menuItems = [
-  {
-    item: 'Become a Sitter',
-    resource: '/dashboard',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Become a sitter',
-    resource: '/signup?accountType=pet_sitter',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: 'My Jobs',
-    resource: '/my-jobs',
-    canView: [AccountType.PET_SITTER],
-    authenticated: true,
-  },
-  {
-    item: 'My Sitters',
-    resource: '/sitters',
-    canView: [AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: 'Messages',
-    resource: '/messages',
-    canView: [AccountType.PET_SITTER, AccountType.PET_OWNER],
-    authenticated: true,
-  },
-  {
-    item: (
-      <NavbarButton variant="outlined" size="large" fullWidth>
-        Login
-      </NavbarButton>
-    ),
-    resource: '/login',
-    canView: null,
-    authenticated: false,
-  },
-  {
-    item: (
-      <NavbarButton variant="contained" size="large" fullWidth disableElevation>
-        Sign up
-      </NavbarButton>
-    ),
-    resource: '/signup',
-    canView: null,
-    authenticated: false,
-  },
-];
-
-const MenuItem: React.FC<{
-  resource: string;
-  item: string | JSX.Element;
-}> = ({ resource, item }) => {
-  const classes = useStyles();
-
-  return (
-    <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
-      <NavLink className={classes.navbarItem} to={resource}>
-        {item}
-      </NavLink>
-    </Grid>
-  );
-};
+import loadProfile from '../../helpers/APICalls/loadProfile';
+import { Profile } from '../../interface/Profile';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { updateSnackBarMessage } = useSnackBar();
+
   const { loggedInUser, logout } = useAuth();
+
   const open = Boolean(anchorEl);
+
+  const NavbarButton = styled(Button)({
+    padding: '10px 0px',
+  });
+
+  const menuItems = [
+    {
+      item: 'Become a Sitter',
+      resource: '/dashboard',
+      canView: [AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: 'Become a sitter',
+      resource: '/signup?accountType=pet_sitter',
+      canView: null,
+      authenticated: false,
+    },
+    {
+      item: 'My Jobs',
+      resource: '/my-jobs',
+      canView: [AccountType.PET_SITTER],
+      authenticated: true,
+    },
+    {
+      item: 'My Sitters',
+      resource: '/sitters',
+      canView: [AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: 'Messages',
+      resource: '/messages',
+      canView: [AccountType.PET_SITTER, AccountType.PET_OWNER],
+      authenticated: true,
+    },
+    {
+      item: (
+        <NavbarButton
+          variant="outlined"
+          size="large"
+          fullWidth
+          color={location.pathname === '/' ? 'secondary' : 'primary'}
+        >
+          Login
+        </NavbarButton>
+      ),
+      resource: '/login',
+      canView: null,
+      authenticated: false,
+    },
+    {
+      item: (
+        <NavbarButton variant="contained" size="large" fullWidth disableElevation>
+          Sign up
+        </NavbarButton>
+      ),
+      resource: '/signup',
+      canView: null,
+      authenticated: false,
+    },
+  ];
+
+  const MenuItem: React.FC<{
+    resource: string;
+    item: string | JSX.Element;
+  }> = ({ resource, item }) => {
+    const classes = useStyles();
+
+    return (
+      <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
+        <NavLink
+          className={location.pathname === '/' ? classes.transparentnavbarItem : classes.navbarItem}
+          to={resource}
+        >
+          {item}
+        </NavLink>
+      </Grid>
+    );
+  };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -111,16 +126,38 @@ const Navbar: React.FC = () => {
     logout();
   };
 
+  interface AccountType {
+    accountType: string;
+  }
+  const [profile, setProfile] = useState<AccountType>({ accountType: 'initial' });
+
   const renderMenuItems = () => {
-    // TODO: conditionally render based on profile type
     return menuItems.map((menu) => {
-      if (menu.authenticated) {
+      if (menu.authenticated && menu.canView?.includes(profile?.accountType || '')) {
         return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
       } else {
-        return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        if (!menu.authenticated) {
+          return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        }
       }
     });
   };
+
+  useEffect(() => {
+    if (loggedInUser) {
+      async function getProfile() {
+        const loadedProfile = await loadProfile(loggedInUser?.id);
+
+        if (!loadedProfile) {
+          updateSnackBarMessage('Profile not found');
+        } else {
+          setProfile(loadedProfile);
+        }
+      }
+
+      getProfile();
+    }
+  }, [loggedInUser, updateSnackBarMessage]);
 
   return (
     <Grid
@@ -130,11 +167,13 @@ const Navbar: React.FC = () => {
       container
     >
       <Grid xs={4} md={6} item>
-        <img className={classes.navbarLogo} src={lovingSitterLogo} />
+        <NavLink className={classes.navbarItem} to="/">
+          <img className={classes.navbarLogo} src={lovingSitterLogo} alt="lovingsitter logo" />
+        </NavLink>
       </Grid>
       <Grid xs={8} md={6} item>
         <Grid container alignItems="center" gap={2} justifyContent="flex-end">
-          {renderMenuItems()}
+          {profile && renderMenuItems()}
           {loggedInUser && (
             <Grid xs={2} item>
               <>
@@ -169,7 +208,7 @@ const Navbar: React.FC = () => {
                     </ListItemIcon>
                     <ListItemText>Settings</ListItemText>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleClose}>
+                  <DropdownMenuItem component={NavLink} to="/dashboard" onClick={handleClose}>
                     <ListItemIcon>
                       <Person fontSize="small" />
                     </ListItemIcon>

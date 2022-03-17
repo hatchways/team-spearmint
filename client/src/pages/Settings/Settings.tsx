@@ -7,6 +7,14 @@ import { makeStyles } from '@mui/styles';
 import SettingsWrapper from '../../components/SettingsWrapper/SettingsWrapper';
 import EditProfile from './EditProfile/EditProfile';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
+import ProfilePhoto from './ProfilePhoto/ProfilePhoto';
+
+import Availability from './Availability/Availability';
+
+import StripeContainer from '../../components/Stripe/StripeContainer';
+import Payment from './Payment/Payment';
+import Availability from './Availability/Availability';
+
 
 const settingsMenu = [
   {
@@ -17,17 +25,17 @@ const settingsMenu = [
   {
     name: 'Profile photo',
     to: '/profile/settings/profile-photo',
-    component: <SettingHeader header="Profile Photo" />,
+    component: <ProfilePhoto header="Profile Photo" />,
   },
   {
     name: 'Availability',
     to: '/profile/settings/availability',
-    component: <SettingHeader header="Availability" />,
+    component: <Availability header="Availability" />,
   },
   {
     name: 'Payment methods',
     to: '/profile/settings/payment-methods',
-    component: <SettingHeader header="Payment Methods" />,
+    component: <Payment header="Payment Methods" />,
   },
 ];
 
@@ -44,9 +52,8 @@ export default function Settings(): JSX.Element {
   const classes = useStyles();
 
   if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser || !profile) {
+  if (!loggedInUser) {
     history.push('/login');
-    // loading for a split seconds until history.push works
     return <CircularProgress />;
   }
 
