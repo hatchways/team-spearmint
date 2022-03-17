@@ -50,12 +50,10 @@
   max-width: 100%;
   padding: 10px 6.6667px;
   background: none;
-  padding:10px;
   text-align: center;
   line-height: 30px;
   font-weight: 600;
 }
-
 .react-calendar__tile--hasActive {
   background: #f14140;
   border-radius: 50%;
@@ -68,5 +66,6 @@
   font-weight: bold;
   color: white;
   padding: 10px;
+
 }
 
