@@ -125,7 +125,11 @@ const Navbar: React.FC = () => {
     handleClose();
     logout();
   };
-  const [profile, setProfile] = useState<Profile>();
+
+  interface AccountType {
+    accountType: string;
+  }
+  const [profile, setProfile] = useState<AccountType>({ accountType: 'initial' });
 
   const renderMenuItems = () => {
     return menuItems.map((menu) => {

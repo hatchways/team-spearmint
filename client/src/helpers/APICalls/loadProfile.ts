@@ -7,7 +7,7 @@ const loadProfile = async (id: string | undefined): Promise<Profile> => {
     method: 'GET',
     credentials: 'include',
   };
-  return await fetch(`/profile/load`, fetchOptions)
+  return await fetch(`/profile/load/${id}`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to load profile' },
