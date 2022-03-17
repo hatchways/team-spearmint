@@ -21,6 +21,7 @@ import Profiles from './pages/Profiles/Profiles';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
 
+
 function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>

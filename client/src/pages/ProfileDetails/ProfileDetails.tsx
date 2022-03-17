@@ -78,6 +78,7 @@ export default function ProfileDetails(): JSX.Element {
           <Box component={Paper} className={classes.profileWrapper}>
             <Card sx={{ border: 'none', boxShadow: 'none', minHeight: 600 }}>
               <CardMedia component="img" height="200" image={profile.coverPicture} alt="banner photo" />
+
               <CardContent className={classes.profileInfoContainer}>
                 <Box className={classes.profileInfo}>
                   <Avatar
@@ -94,6 +95,7 @@ export default function ProfileDetails(): JSX.Element {
                     <LocationOnIcon fontSize="small" color="primary" />
                     <Typography variant="caption" sx={{ color: '#c7c7c7' }}>
                       {profile.address}
+
                     </Typography>
                   </Box>
                   <Box className={classes.aboutMe}>

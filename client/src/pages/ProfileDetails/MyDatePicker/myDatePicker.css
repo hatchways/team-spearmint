@@ -25,7 +25,6 @@
     background-color: #f14140;
     color: #fff;
   }
-  
   .react-datepicker__day--selected,
   .react-datepicker__day--in-selecting-range,
   .react-datepicker__day--in-range,
@@ -42,4 +41,3 @@
     background-color: #f14140;
     color: #fff;
   }
-  
