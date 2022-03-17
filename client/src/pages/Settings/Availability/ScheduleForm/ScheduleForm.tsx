@@ -23,6 +23,7 @@ interface schedule {
   friday: Day;
   saturday: Day;
   sunday: Day;
+  active: boolean;
 }
 
 interface Props {
@@ -38,22 +39,25 @@ export default function ScheduleForm({ schedule, handleEditSchedule, showActive,
       <Formik enableReinitialize initialValues={schedule} onSubmit={handleEditSchedule}>
         {({ values, setFieldValue, handleChange, handleSubmit, isSubmitting }) => (
           <form onSubmit={handleSubmit}>
-            <FormInput
-              className={classes.scheduleNameInput}
-              id="scheduleSelect"
-              label="Schedule"
-              margin="dense"
-              name="name"
-              placeholder="Schedule name"
-              autoComplete="name"
-              autoFocus
-              value={values.name}
-              onChange={handleChange}
-            />
-            {showActive && <StarIcon />}
+            <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+              <FormInput
+                disabled={true}
+                className={classes.scheduleNameInput}
+                id="scheduleSelect"
+                label="Schedule"
+                margin="dense"
+                name="name"
+                placeholder="Schedule name"
+                autoComplete="name"
+                autoFocus
+                value={values.name}
+                onChange={handleChange}
+              />
+              {showActive && <StarIcon />}
+            </Box>
             {daysOfTheWeek.map((day) => {
               return (
-                <DayOfWeekInput values={values} setFieldValue={setFieldValue} key={day} day={day}></DayOfWeekInput>
+                <DayOfWeekInput values={values} setFieldValue={setFieldValue} key={day} day={day} disabled={true} />
               );
             })}
             <Box display="flex" flexDirection="row" justifyContent="center" height="100%">

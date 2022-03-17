@@ -20,6 +20,7 @@ interface DayOfWeekInputProps {
   day: string;
   values: any;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
+  disabled: boolean;
 }
 
 const times = [
@@ -50,7 +51,7 @@ const times = [
   '24:00',
 ];
 
-export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeekInputProps) {
+export default function DayOfWeekInput({ day, values, setFieldValue, disabled }: DayOfWeekInputProps) {
   const { updateSnackBarMessage } = useSnackBar();
 
   const classes = useStyles();
@@ -93,6 +94,7 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
       alignItems="center"
     >
       <FormControlLabel
+        disabled={disabled}
         sx={{ marginLeft: 1, marginRight: 15, width: 20 }}
         control={<Checkbox onChange={(e) => handleCheckBox(e)} checked={values && values[day].active} defaultChecked />}
         label={day}
@@ -100,6 +102,7 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
       <FormControl>
         <InputLabel id="startTimeLabel">Start Time</InputLabel>
         <Select
+          disabled={disabled}
           className={classes.startTime}
           {...getDisabled(!values[day].active)}
           id="startTimeSelect"
@@ -125,6 +128,7 @@ export default function DayOfWeekInput({ day, values, setFieldValue }: DayOfWeek
       <FormControl>
         <InputLabel id="endTimeLabel">End Time</InputLabel>
         <Select
+          disabled={disabled}
           className={classes.endTime}
           {...getDisabled(!values[day].active)}
           id="endTimeSelect"

@@ -16,7 +16,7 @@ export default function Landing(): JSX.Element {
     { location, start, end }: { location: string; start: Date; end: Date },
     { setSubmitting }: FormikHelpers<{ location: string; start: Date; end: Date }>,
   ) => {
-    alert(`location: ${location} - start: ${start} - end: ${end}`);
+    // alert(`location: ${location} - start: ${start} - end: ${end}`);
     updateSitterSearchInfo(location, start, end);
     history.push('/profiles');
   };
