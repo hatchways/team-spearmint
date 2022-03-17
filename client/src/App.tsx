@@ -16,6 +16,7 @@ import { SitterSearchProvider } from './context/useSitterSearchContext';
 import { Navbar } from './components/Navbar/Navbar';
 import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
+import ManageBookings from './pages/ManageBookings/ManageBookings';
 import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
 import Profiles from './pages/Profiles/Profiles';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';

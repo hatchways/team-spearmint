@@ -57,6 +57,7 @@ const MyModal: React.FC<{
               <Box
                 onClick={() => {
                   handleStatus(data._id, 'declined');
+
                   handleClose();
                 }}
                 className={classes.statusWrapper}
