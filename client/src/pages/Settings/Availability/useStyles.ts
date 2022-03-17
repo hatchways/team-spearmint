@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: 'red',
   },
   select: {
-    width: '100%',
+    width: '30%',
     marginRight: 20,
   },
   addSchedule: {
-    height: 55,
+    height: 52,
     width: '30%',
   },
   scheduleNameInput: {

@@ -1,19 +1,23 @@
-import { TextField, Typography, Box } from '@mui/material';
+import { TextField, Typography, Box, Button } from '@mui/material';
 import useStyles from './useStyles';
 import { useState } from 'react';
 
 interface Props {
   searchLocation: string | undefined;
   setSearchLocation: React.Dispatch<React.SetStateAction<string | undefined>>;
-  searchDate: string | undefined;
-  setSearchDate: React.Dispatch<React.SetStateAction<string | undefined>>;
+  searchStartDate: string | undefined;
+  setSearchStartDate: React.Dispatch<React.SetStateAction<string | undefined>>;
+  searchEndDate: string | undefined;
+  setSearchEndDate: React.Dispatch<React.SetStateAction<string | undefined>>;
   handleSearchClick: () => void;
 }
 export default function SearchBar({
   searchLocation,
   setSearchLocation,
-  searchDate,
-  setSearchDate,
+  searchStartDate,
+  setSearchStartDate,
+  searchEndDate,
+  setSearchEndDate,
   handleSearchClick,
 }: Props) {
   const classes = useStyles();
@@ -36,17 +40,38 @@ export default function SearchBar({
           onChange={(e) => setSearchLocation(e.target.value)}
           value={searchLocation}
         />
-        <TextField
-          sx={{ marginRight: '5px' }}
-          className={classes.date}
-          id="dates"
-          placeholder="Your dates"
-          margin="normal"
-          type="date"
-          autoComplete="current-dates"
-          onChange={(e) => setSearchDate(e.target.value)}
-          value={searchDate}
-        />
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+          <Typography sx={{ marginBottom: -2.5 }} variant="subtitle2">
+            Drop Off
+          </Typography>
+          <TextField
+            sx={{ marginRight: '5px' }}
+            className={classes.date}
+            id="dates"
+            placeholder="Your dates"
+            margin="normal"
+            type="date"
+            autoComplete="current-dates"
+            onChange={(e) => setSearchStartDate(e.target.value)}
+            value={searchStartDate}
+          />
+        </Box>
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+          <Typography sx={{ marginBottom: -2.5 }} variant="subtitle2">
+            Pick Up
+          </Typography>
+          <TextField
+            sx={{ marginRight: '5px' }}
+            className={classes.date}
+            id="dates"
+            placeholder="Your dates"
+            margin="normal"
+            type="date"
+            autoComplete="current-dates"
+            onChange={(e) => setSearchEndDate(e.target.value)}
+            value={searchEndDate}
+          />
+        </Box>
         <Button
           onClick={() => handleSearchClick()}
           sx={{ marginTop: 1 }}

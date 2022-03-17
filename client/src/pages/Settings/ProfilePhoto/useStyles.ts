@@ -14,9 +14,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: 'lightgray',
   },
   submit: {
-    margin: theme.spacing(3, 2, 2),
+    marginBottom: 20,
+    // margin: theme.spacing(3, 2, 2),
     padding: 10,
-    width: 250,
+    width: 300,
     height: 56,
     borderRadius: theme.shape.borderRadius,
     fontSize: 16,

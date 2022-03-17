@@ -43,6 +43,8 @@ interface schedule {
   saturday: Day;
   sunday: Day;
   _id: string;
+  active: boolean;
+
 }
 
 const daysOfTheWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -208,10 +210,10 @@ export default function Availability({ header }: Props): JSX.Element {
           </FormControl>
           <Button
             onClick={handleNewSchedule}
-            sx={{ borderRadius: '10%', color: 'green', border: 'solid 2px green' }}
+            sx={{ color: 'white', backgroundColor: '#f14140', marginLeft: 2.5 }}
             className={classes.addSchedule}
           >
-            Add Schedule +
+            + New Schedule
           </Button>
         </Box>
         {schedule && (
@@ -261,6 +263,7 @@ export default function Availability({ header }: Props): JSX.Element {
                         setFieldValue={setFieldValue}
                         key={day}
                         day={day}
+                        disabled={false}
                       ></DayOfWeekInput>
                     );
                   })}

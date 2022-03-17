@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 // @access private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
     const { name, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = req.body.schedule
-
     const profile = await Profile.findOne({userId: req.user.id});
     if(!profile){
       res.status(404)

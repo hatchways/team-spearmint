@@ -7,32 +7,33 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import ProfileCard from './ProfileCard/ProfileCard';
 import SearchBar from './SearchBar/SearchBar';
 import { Profile } from '../../interface/Profile';
+import { useSitterSearch } from '../../context/useSitterSearchContext';
+
 export default function Profiles() {
   const classes = useStyles();
   const { updateSnackBarMessage } = useSnackBar();
-
+  const { location, start, end } = useSitterSearch();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchLocation, setSearchLocation] = useState<string>();
-  const [searchDate, setSearchDate] = useState<string>();
+  const [searchStartDate, setSearchStartDate] = useState<string>();
+  const [searchEndDate, setSearchEndDate] = useState<string>();
 
   useEffect(() => {
-    const loadProfiles = async () => {
-      const profiles = await getProfiles(searchLocation, searchDate);
-
-      if (profiles) {
-        setProfiles(profiles.profiles);
-      } else {
-        updateSnackBarMessage('No profiles found! Please enter a new location/dates!');
-      }
+    const initialLoad = async () => {
+      const startString = start ? start.toString() : null;
+      const endString = end ? end.toString() : null;
+      console.log(startString, endString);
+      const profiles = await getProfiles(location, startString, endString);
+      if (profiles) setProfiles(profiles.profiles);
+      else updateSnackBarMessage('No profiles found!');
     };
-    if (!searchLocation && !searchDate) {
-      loadProfiles().catch((error) => updateSnackBarMessage(error));
-    }
-  }, [updateSnackBarMessage, searchLocation, searchDate]);
+    initialLoad().catch((error) => updateSnackBarMessage(error));
+  }, [location, start, end, updateSnackBarMessage]);
 
   const [currentIndicesTopRow, setCurrentIndicesTopRow] = useState(3);
   const [currentIndicesBottomRow, setCurrentIndicesBottomRow] = useState(6);
-
+  console.log(profiles);
+  console.log(location, start);
   const showMoreProfiles = () => {
     if (currentIndicesTopRow + 3 > profiles.length - 1) {
       setCurrentIndicesTopRow(3);
@@ -44,8 +45,7 @@ export default function Profiles() {
   };
 
   const handleSearchClick = async () => {
-    const profiles = await getProfiles(searchLocation, searchDate);
-    console.log(profiles);
+    const profiles = await getProfiles(searchLocation, searchStartDate, searchEndDate);
     setProfiles(profiles.profiles);
   };
 
@@ -55,20 +55,24 @@ export default function Profiles() {
         <SearchBar
           searchLocation={searchLocation}
           setSearchLocation={setSearchLocation}
-          searchDate={searchDate}
-          setSearchDate={setSearchDate}
+          searchStartDate={searchStartDate}
+          setSearchStartDate={setSearchStartDate}
+          searchEndDate={searchEndDate}
+          setSearchEndDate={setSearchEndDate}
           handleSearchClick={handleSearchClick}
         ></SearchBar>
         <Box>
           <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+            {profiles &&
+              profiles.slice(currentIndicesTopRow - 3, currentIndicesTopRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
           </Box>
           <Box className={classes.innerFlexRowContainer}>
-            {profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
-              return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
-            })}
+            {profiles &&
+              profiles.slice(currentIndicesBottomRow - 3, currentIndicesBottomRow).map((profile) => {
+                return <ProfileCard key={profile._id} profile={profile}></ProfileCard>;
+              })}
           </Box>
         </Box>
         <Button

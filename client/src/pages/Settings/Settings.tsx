@@ -13,6 +13,7 @@ import Availability from './Availability/Availability';
 
 import StripeContainer from '../../components/Stripe/StripeContainer';
 import Payment from './Payment/Payment';
+import Availability from './Availability/Availability';
 
 
 const settingsMenu = [
