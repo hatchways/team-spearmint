@@ -44,6 +44,7 @@ interface schedule {
   sunday: Day;
   _id: string;
   active: boolean;
+
 }
 
 const daysOfTheWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
