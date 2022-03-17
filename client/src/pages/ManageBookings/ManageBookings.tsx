@@ -34,7 +34,9 @@ export default function ManageBookings(): JSX.Element {
 
   useEffect(() => {
     if (loggedInUser) {
-      getSitterRequests(loggedInUser.id).then((res) => updateSitterRequestsContext(res));
+      getSitterRequests(loggedInUser.id).then((res) => {
+        updateSitterRequestsContext(res);
+      });
     }
   }, [loggedInUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
