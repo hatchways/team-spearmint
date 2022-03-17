@@ -16,6 +16,9 @@ import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
 import ManageBookings from './pages/ManageBookings/ManageBookings';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import ManageBookings from './pages/ManageBookings/ManageBookings';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+
 
 function App(): JSX.Element {
   return (
@@ -30,8 +33,9 @@ function App(): JSX.Element {
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute path="/profile/settings" component={Settings} />
+                <Route exact path="/dashboard" component={Dashboard} />
+                <Route path="/profile/settings" component={Settings} />
+                <Route exact path="/manage-bookings" component={ManageBookings} />
                 <Route path="*">
                   <NotFound />
                 </Route>

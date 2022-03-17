@@ -47,18 +47,25 @@
   padding: 2em 0.5em;
 }
 .react-calendar__tile {
-  margin-left: 20px;
+  max-width: 100%;
   padding: 10px 6.6667px;
   background: none;
   text-align: center;
   line-height: 30px;
   font-weight: 600;
 }
-
-.react-calendar__tile--active {
+.react-calendar__tile--hasActive {
   background: #f14140;
   border-radius: 50%;
   font-weight: bold;
   color: white;
+}
+.react-calendar__tile--active abbr {
+  background: #f14140;
+  border-radius: 50%;
+  font-weight: bold;
+  color: white;
+  padding: 10px;
+
 }
 

@@ -15,9 +15,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const RequestInfo: React.FC<{
-  dummyData: any;
+  data: any;
   large?: boolean;
-}> = ({ dummyData, large }) => {
+  handleStatus: (requestId: string, newStatus: string) => void;
+}> = ({ data, large, handleStatus }) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = (): void => {
@@ -36,27 +37,29 @@ const RequestInfo: React.FC<{
       <CardContent>
         <Grid container sx={{ display: 'flex' }}>
           <Grid item xs={8} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant={large ? 'h6' : 'body1'}>{dummyData.date}</Typography>
+            <Typography variant={large ? 'h6' : 'body1'}>{`${data.start}-${data.end}`}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Avatar
                 alt="Profile Image"
-                src={dummyData.avatar}
+                src={data.ownerPhoto}
                 sx={large ? { width: 50, height: 50 } : { width: 40, height: 40 }}
               />
-              <Typography variant={large ? 'h6' : 'body1'}>{dummyData.name}</Typography>
+              <Typography variant={large ? 'h6' : 'body1'}>{data.ownerName}</Typography>
             </Box>
           </Grid>
           <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="caption" className={classes.status}>
-              {large ? null : dummyData.status}
+              {large ? null : data.status}
             </Typography>
           </Grid>
           <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'right' }}>
-            <Box onClick={handleOpen} sx={large ? { cursor: 'pointer', marginTop: -2 } : { cursor: 'pointer' }}>
-              <SettingsIcon color="disabled" fontSize="small" />
-            </Box>
+            {data.status === 'completed' ? null : (
+              <Box onClick={handleOpen} sx={large ? { cursor: 'pointer', marginTop: -2 } : { cursor: 'pointer' }}>
+                <SettingsIcon color="disabled" fontSize="small" />
+              </Box>
+            )}
             <Modal disableAutoFocus={true} open={open} onClose={handleClose}>
-              <MyModal dummyData={dummyData} open={open} handleClose={handleClose} />
+              <MyModal data={data} open={open} handleClose={handleClose} handleStatus={handleStatus} />
             </Modal>
           </Grid>
         </Grid>

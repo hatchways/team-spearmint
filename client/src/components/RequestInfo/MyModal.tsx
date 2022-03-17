@@ -5,10 +5,11 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import useStyles from './useStyles';
 
 const MyModal: React.FC<{
-  dummyData: any;
+  data: any;
   open: boolean;
+  handleStatus: (requestId: string, newStatus: string) => void;
   handleClose: () => void;
-}> = ({ dummyData, open, handleClose }) => {
+}> = ({ data, open, handleClose, handleStatus }) => {
   const classes = useStyles();
 
   return (
@@ -18,20 +19,20 @@ const MyModal: React.FC<{
         <Grid container alignItems="center">
           <Grid xs={8} item>
             <Typography variant="body1" gutterBottom>
-              {dummyData.date}
+              {`${data.start}-${data.end}`}
             </Typography>
             <Box className={classes.nameAvatar}>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <Avatar alt="Profile Image" src={dummyData.avatar} sx={{ width: 40, height: 40 }} />
+                <Avatar alt="Profile Image" src={data.ownerPhoto} sx={{ width: 40, height: 40 }} />
               </Typography>
-              <Typography variant="body1">{dummyData.name}</Typography>
+              <Typography variant="body1">{data.ownerName}</Typography>
             </Box>
           </Grid>
-          {dummyData.status === 'pending' && (
+          {data.status === 'pending' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box
                 onClick={() => {
-                  alert('clicked on accepted');
+                  handleStatus(data._id, 'accepted');
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -41,7 +42,7 @@ const MyModal: React.FC<{
               </Box>
               <Box
                 onClick={() => {
-                  alert('clicked on declined');
+                  handleStatus(data._id, 'declined');
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -51,11 +52,12 @@ const MyModal: React.FC<{
               </Box>
             </Grid>
           )}
-          {dummyData.status === 'accepted' && (
+          {data.status === 'accepted' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box
                 onClick={() => {
-                  alert('clicked on declined');
+                  handleStatus(data._id, 'declined');
+
                   handleClose();
                 }}
                 className={classes.statusWrapper}
@@ -65,7 +67,7 @@ const MyModal: React.FC<{
               </Box>
             </Grid>
           )}
-          {dummyData.status === 'declined' && (
+          {data.status === 'declined' && (
             <Grid xs={4} item className={classes.statusContainer}>
               <Box className={classes.statusWrapper}>
                 <Typography style={{ color: '#f14140', fontSize: '11px' }}>
