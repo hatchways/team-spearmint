@@ -8,13 +8,9 @@ import SettingsWrapper from '../../components/SettingsWrapper/SettingsWrapper';
 import EditProfile from './EditProfile/EditProfile';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
 import ProfilePhoto from './ProfilePhoto/ProfilePhoto';
-
-import Availability from './Availability/Availability';
-
 import StripeContainer from '../../components/Stripe/StripeContainer';
 import Payment from './Payment/Payment';
 import Availability from './Availability/Availability';
-
 
 const settingsMenu = [
   {

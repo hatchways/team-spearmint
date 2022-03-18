@@ -51,7 +51,6 @@ const times = [
   '24:00',
 ];
 
-
 export default function DayOfWeekInput({ day, values, setFieldValue, disabled }: DayOfWeekInputProps) {
   const { updateSnackBarMessage } = useSnackBar();
 
