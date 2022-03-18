@@ -32,10 +32,11 @@ export default function ProfileDetails(): JSX.Element {
   useEffect(() => {
     const takeProfile = async () => {
       loadProfile(sitterId).then((data: any) => {
-        if (data.error) {
-          console.error({ error: data.error.message });
+        console.log(data);
+        if (!data) {
+          console.error({ error: !data });
         } else if (data) {
-          setProfile(data.success.profile);
+          setProfile(data);
         } else {
           console.error({ data });
         }
@@ -95,7 +96,6 @@ export default function ProfileDetails(): JSX.Element {
                     <LocationOnIcon fontSize="small" color="primary" />
                     <Typography variant="caption" sx={{ color: '#c7c7c7' }}>
                       {profile.address}
-
                     </Typography>
                   </Box>
                   <Box className={classes.aboutMe}>
